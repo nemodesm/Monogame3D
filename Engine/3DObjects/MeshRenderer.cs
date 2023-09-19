@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Engine;
 using Engine.Exceptions;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace VillageDefender._3DObjects
+namespace Engine._3DObjects
 {
     internal class MeshRenderer : LocalizedObject, ICameraDrawable
     {

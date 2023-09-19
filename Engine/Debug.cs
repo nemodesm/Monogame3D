@@ -29,11 +29,6 @@ namespace Engine
 
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
 
-            if (File.Exists(appDataPath + LogPath))
-            {
-                File.Move(appDataPath + LogPath, appDataPath + PreviousLogPath, true);
-            }
-
             // var logFile = File.Create(appDataPath + LogPath);
             _writer = new StreamWriter(appDataPath + LogPath, false)
             {
@@ -42,6 +37,14 @@ namespace Engine
             };
 
             _writer.WriteLine($"{ApplicationName}: Application opened at {DateTime.Now}");
+        }
+
+        private void AttemptMovePreviousFile()
+        {
+            var appDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/{ApplicationName}/";
+
+            if (File.Exists(appDataPath + LogPath))
+                File.Move(appDataPath + LogPath, appDataPath + PreviousLogPath, true);
         }
 
         ~Debug()

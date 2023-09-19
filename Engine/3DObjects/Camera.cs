@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace VillageDefender._3DObjects
+namespace Engine._3DObjects
 {
     internal class Camera : LocalizedObject, IDrawable
     {

@@ -11,10 +11,8 @@ using Engine;
 
 namespace VillageDefender
 {
-    internal class Game3D : Game
+    internal class Game3D : Engine.Engine
     {
-        private readonly GraphicsDeviceManager _graphics;
-
         //Camera
         private Vector3 _camTarget;
         private Vector3 _camPosition;
@@ -28,10 +26,8 @@ namespace VillageDefender
         //Orbit
         private bool _orbit = false;
 
-        public Game3D()
+        public Game3D() : base()
         {
-            Debug.Initialise();
-            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
 

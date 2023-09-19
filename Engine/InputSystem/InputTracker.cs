@@ -1,13 +1,25 @@
 ﻿using System;
-using Engine;
 using Engine.Exceptions;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 
-namespace VillageDefender.Input
+namespace Engine.InputSystem
 {
     internal class InputTracker : GameComponent
     {
+        internal static InputTracker Instance;
+
+        private InputState _current;
+        private InputState _previousFrame;
+
+        /// <summary>
+        /// The InputState for the current frame
+        /// </summary>
+        public InputState Current => _current;
+        /// <summary>
+        /// The InputState for the previous frame
+        /// </summary>
+        public InputState PreviousFrame => _previousFrame;
+
         private InputTracker() : base(null) => Debug.LogError(new ApplicationException());
         private InputTracker(Game game) : base(game)
         {
@@ -35,23 +47,10 @@ namespace VillageDefender.Input
         /// <returns>The Input object that is created</returns>
         internal static InputTracker Initialise(Game game) => CreateInstance(game);
 
-        internal static InputTracker Instance;
-
-        private InputState previousFrame;
-        private InputState current;
-
-        public Vector2 Movement
-        {
-            get
-            {
-                return new Vector2();
-            }
-        }
-
         public override void Update(GameTime gameTime)
         {
-            previousFrame = current;
-            current = new InputState();
+            _previousFrame = _current;
+            _current = new InputState();
 
             base.Update(gameTime);
         }

@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using VillageDefender.Input;
 
 namespace VillageDefender
 {
@@ -27,8 +26,6 @@ namespace VillageDefender
             Debug.Log("this is a log");
             Debug.LogWarning("this is a warn");
             Debug.LogError("this is an error");
-
-            Components.Add(InputTracker.Initialise(this));
 
             base.Initialize();
         }
