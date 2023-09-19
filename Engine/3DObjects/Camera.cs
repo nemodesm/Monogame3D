@@ -5,9 +5,9 @@ using Microsoft.Xna.Framework;
 
 namespace Engine._3DObjects
 {
-    internal class Camera : LocalizedObject, IDrawable
+    public class Camera : LocalizedObject, IDrawable
     {
-        private List<ICameraDrawable> drawnObjects = new();
+        private readonly List<ICameraDrawable> _drawnObjects = new();
 
         public Matrix ViewMatrix;
         public Matrix WorldMatrix;
@@ -31,14 +31,14 @@ namespace Engine._3DObjects
         }
         public Camera([NotNull] Game game, [NotNull] List<ICameraDrawable> drawnObjects) : base(game)
         {
-            this.drawnObjects = drawnObjects;
+            this._drawnObjects = drawnObjects;
         }
 
         public void Draw(GameTime gameTime)
         {
             game.GraphicsDevice.Clear(_clearColor);
 
-            foreach (var drawable in drawnObjects)
+            foreach (var drawable in _drawnObjects)
             {
                 drawable.Draw(gameTime, this);
             }
@@ -47,14 +47,14 @@ namespace Engine._3DObjects
         public override void Initialize()
         {
             //Setup Camera
-            Rotation = Quaternion.Identity;
-            Position = new Vector3(0f, 0f, -5);
+            RotationEuler = Vector3.Zero;
+            Position = new Vector3(0f, 1f, -10);
 
-            // ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
-            //     MathHelper.ToRadians(45f), game._graphics.
-            //         GraphicsDevice.Viewport.AspectRatio,
-            //     1f, 1000f);
-            // ViewMatrix = Matrix.CreateLookAt(_camPosition, _camTarget,
+            ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
+                MathHelper.ToRadians(45f), game.GraphicsDevice.Viewport.AspectRatio,
+                1f, 1000f);
+            // TODO: _camTarget need to be replaced with PositionedObject.Forward (which is not implemented)
+            // ViewMatrix = Matrix.CreateLookAt(Position, _camTarget,
             //     new Vector3(0f, 1f, 0f));// Y up
             // WorldMatrix = Matrix.CreateWorld(_camTarget, Vector3.
             //     Forward, Vector3.Up);

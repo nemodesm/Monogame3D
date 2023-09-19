@@ -2,7 +2,7 @@
 
 namespace Engine._3DObjects
 {
-    internal interface ICameraDrawable
+    public interface ICameraDrawable
     {
         internal void Draw(GameTime gameTime, Camera camera);
     }

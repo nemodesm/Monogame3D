@@ -13,6 +13,8 @@ namespace Engine
     {
         protected internal readonly GraphicsDeviceManager _graphics;
 
+        public Camera Camera { get; private set; }
+
         protected Engine()
         {
             _graphics = new GraphicsDeviceManager(this);
@@ -22,10 +24,13 @@ namespace Engine
         {
             Debug.Initialise();
 
-            Components.Add(new Camera(this));
+            Camera = new Camera(this);
+            Components.Add(Camera);
             Components.Add(InputTracker.CreateInstance(this));
 
             base.Initialize();
         }
+
+        protected sealed override void Draw(GameTime gameTime) => base.Draw(gameTime);
     }
 }
