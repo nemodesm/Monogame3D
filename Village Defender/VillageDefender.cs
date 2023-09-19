@@ -1,18 +1,19 @@
-﻿using CoreEngine;
+﻿using Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using System;
+using VillageDefender.Input;
 
 namespace VillageDefender
 {
-    internal class VillageDefender : Engine
+    internal class VillageDefender : Game
     {
-        public Action<GameTime> update { get; set; }
-        public Action<GameTime> draw { get; set; }
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
 
-        public VillageDefender() : base()
+        public VillageDefender()
         {
+            _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -21,23 +22,30 @@ namespace VillageDefender
         {
             // TODO: Add your initialization logic here
 
+            Debug.Initialise();
+
+            Debug.Log("this is a log");
+            Debug.LogWarning("this is a warn");
+            Debug.LogError("this is an error");
+
+            Components.Add(InputTracker.Initialise(this));
+
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Services.AddService(typeof(SpriteBatch), _spriteBatch);
 
             // TODO: use this.Content to load your game content here
-
-            base.LoadContent();
         }
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            update?.Invoke(gameTime);
 
             // TODO: Add your update logic here
 
@@ -48,7 +56,9 @@ namespace VillageDefender
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            draw?.Invoke(gameTime);
+            _spriteBatch.Begin();
+            //_spriteBatch.Draw(texture, position, Color.White);
+            _spriteBatch.End();
 
             // TODO: Add your drawing code here
 
