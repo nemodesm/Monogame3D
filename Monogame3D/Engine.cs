@@ -1,10 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using Monogame3D._3DObjects;
 using Monogame3D.InputSystem;
 using Monogame3D.UI;
-using Monogame3D.UI.Components;
 
 namespace Monogame3D
 {

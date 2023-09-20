@@ -80,7 +80,7 @@ namespace Monogame3D.UI.Components
             throw new NotImplementedException();
         }
 
-        public void DeSelect()
+        public void Deselect()
         {
             throw new NotImplementedException();
         }

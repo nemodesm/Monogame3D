@@ -20,6 +20,11 @@ namespace Monogame3D.UI
         public virtual AnchorPosition AnchorPosition { get; set; }
         public virtual Vector2 Offset { get; set; }
 
+        public bool Enabled { get; set; }
+        public int UpdateOrder { get; }
+        public event EventHandler<EventArgs> EnabledChanged;
+        public event EventHandler<EventArgs> UpdateOrderChanged;
+
         public UIElement(params UIComponent[] components)
         {
             foreach (var component in components)
@@ -99,9 +104,17 @@ namespace Monogame3D.UI
             }
         }
 
-        public bool Enabled { get; set; }
-        public int UpdateOrder { get; }
-        public event EventHandler<EventArgs> EnabledChanged;
-        public event EventHandler<EventArgs> UpdateOrderChanged;
+        public T GetComponent<T>() where T : UIComponent
+        {
+            foreach (var component in _components)
+            {
+                if (component is T t)
+                {
+                    return t;
+                }
+            }
+
+            return null;
+        }
     }
 }
