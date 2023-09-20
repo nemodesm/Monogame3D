@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
-namespace Engine
+namespace Monogame3D
 {
     internal static class QuaternionExtension
     {

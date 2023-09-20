@@ -1,8 +1,8 @@
 ﻿using System;
-using Engine.Exceptions;
 using Microsoft.Xna.Framework;
+using Monogame3D.Exceptions;
 
-namespace Engine.InputSystem
+namespace Monogame3D.InputSystem
 {
     internal class InputTracker : GameComponent
     {

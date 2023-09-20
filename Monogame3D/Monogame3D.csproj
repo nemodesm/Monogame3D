@@ -2,10 +2,17 @@
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <Platforms>AnyCPU;x64;ARM32;x86</Platforms>
+    <IsPackable>false</IsPackable>
+    <Company>NemoWorks</Company>
+    <AssemblyVersion>0.0.1</AssemblyVersion>
+    <NeutralLanguage>en-US</NeutralLanguage>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mathematics\" />
   </ItemGroup>
 </Project>

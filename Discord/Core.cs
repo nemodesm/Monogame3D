@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
-using Engine;
+using Monogame3D;
 
 namespace Discord
 {
@@ -513,10 +513,7 @@ namespace Discord
         {
             get
             {
-                if (MethodsStructure == null)
-                {
-                    MethodsStructure = Marshal.PtrToStructure(MethodsPtr, typeof(FfiMethods));
-                }
+                MethodsStructure ??= Marshal.PtrToStructure(MethodsPtr, typeof(FfiMethods));
                 return (FfiMethods)MethodsStructure;
             }
 
@@ -620,10 +617,7 @@ namespace Discord
         {
             get
             {
-                if (MethodsStructure == null)
-                {
-                    MethodsStructure = Marshal.PtrToStructure(MethodsPtr, typeof(FfiMethods));
-                }
+                MethodsStructure ??= Marshal.PtrToStructure(MethodsPtr, typeof(FfiMethods));
                 return (FfiMethods)MethodsStructure;
             }
 
@@ -689,10 +683,7 @@ namespace Discord
         {
             get
             {
-                if (MethodsStructure == null)
-                {
-                    MethodsStructure = Marshal.PtrToStructure(MethodsPtr, typeof(FfiMethods));
-                }
+                MethodsStructure ??= Marshal.PtrToStructure(MethodsPtr, typeof(FfiMethods));
                 return (FfiMethods)MethodsStructure;
             }
 
@@ -923,13 +914,13 @@ namespace Discord
         private ApplicationManager.FfiEvents _applicationEvents;
 
         [Obsolete]
-        internal ApplicationManager ApplicationManagerInstance;
+        internal ApplicationManager ApplicationManagerInstance = null!;
 
         private readonly IntPtr _userEventsPtr;
 
         private UserManager.FfiEvents _userEvents;
 
-        internal UserManager UserManagerInstance;
+        internal UserManager UserManagerInstance = null!;
 
         private readonly IntPtr _imageEventsPtr;
 
@@ -937,19 +928,19 @@ namespace Discord
         private ImageManager.FfiEvents _imageEvents;
 
         [Obsolete]
-        internal ImageManager ImageManagerInstance;
+        internal ImageManager ImageManagerInstance = null!;
 
         private readonly IntPtr _activityEventsPtr;
 
         private ActivityManager.FfiEvents _activityEvents;
 
-        internal ActivityManager ActivityManagerInstance;
+        internal ActivityManager ActivityManagerInstance = null!;
 
         private readonly IntPtr _relationshipEventsPtr;
 
         private RelationshipManager.FfiEvents _relationshipEvents;
 
-        internal RelationshipManager RelationshipManagerInstance;
+        internal RelationshipManager RelationshipManagerInstance = null!;
 
         private readonly IntPtr _lobbyEventsPtr;
 
@@ -957,7 +948,7 @@ namespace Discord
         private LobbyManager.FfiEvents _lobbyEvents;
 
         [Obsolete]
-        internal LobbyManager LobbyManagerInstance;
+        internal LobbyManager LobbyManagerInstance = null!;
 
         private readonly IntPtr _networkEventsPtr;
 
@@ -965,13 +956,13 @@ namespace Discord
         private NetworkManager.FfiEvents _networkEvents;
 
         [Obsolete]
-        internal NetworkManager NetworkManagerInstance;
+        internal NetworkManager NetworkManagerInstance = null!;
 
         private readonly IntPtr _overlayEventsPtr;
 
         private OverlayManager.FfiEvents _overlayEvents;
 
-        internal OverlayManager OverlayManagerInstance;
+        internal OverlayManager OverlayManagerInstance = null!;
 
         private readonly IntPtr _storageEventsPtr;
 
@@ -979,7 +970,7 @@ namespace Discord
         private StorageManager.FfiEvents _storageEvents;
 
         [Obsolete]
-        internal StorageManager StorageManagerInstance;
+        internal StorageManager StorageManagerInstance = null!;
 
         private readonly IntPtr _storeEventsPtr;
 
@@ -987,13 +978,13 @@ namespace Discord
         private StoreManager.FfiEvents _storeEvents;
 
         [Obsolete]
-        internal StoreManager StoreManagerInstance;
+        internal StoreManager StoreManagerInstance = null!;
 
         private readonly IntPtr _voiceEventsPtr;
 
         private VoiceManager.FfiEvents _voiceEvents;
 
-        internal VoiceManager VoiceManagerInstance;
+        internal VoiceManager VoiceManagerInstance = null!;
 
         private readonly IntPtr _achievementEventsPtr;
 
@@ -1001,20 +992,17 @@ namespace Discord
         private AchievementManager.FfiEvents _achievementEvents;
 
         [Obsolete]
-        internal AchievementManager AchievementManagerInstance;
+        internal AchievementManager AchievementManagerInstance = null!;
 
         private readonly IntPtr _methodsPtr;
 
-        private Object _methodsStructure;
+        private Object _methodsStructure = null!;
 
         private FfiMethods Methods
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
                 return (FfiMethods)_methodsStructure;
             }
 
@@ -1361,10 +1349,7 @@ namespace Discord
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods))!;
                 return (FfiMethods)_methodsStructure;
             }
 
@@ -1623,10 +1608,7 @@ namespace Discord
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
                 return (FfiMethods)_methodsStructure;
             }
 
@@ -1655,7 +1637,7 @@ namespace Discord
             var h = GCHandle.FromIntPtr(ptr);
             var callback = (FetchHandler)h.Target;
             h.Free();
-            callback(result, handleResult);
+            callback?.Invoke(result, handleResult);
         }
 
         public void Fetch(ImageHandle handle, bool refresh, FetchHandler callback)
@@ -1791,10 +1773,7 @@ namespace Discord
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
                 return (FfiMethods)_methodsStructure;
             }
 
@@ -2012,10 +1991,7 @@ namespace Discord
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
                 return (FfiMethods)_methodsStructure;
             }
 
@@ -2403,10 +2379,7 @@ namespace Discord
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
                 return (FfiMethods)_methodsStructure;
             }
 
@@ -3296,10 +3269,7 @@ namespace Discord
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
                 return (FfiMethods)_methodsStructure;
             }
 
@@ -3587,10 +3557,7 @@ namespace Discord
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
                 return (FfiMethods)_methodsStructure;
             }
 
@@ -3834,24 +3801,21 @@ namespace Discord
 
         private readonly IntPtr _methodsPtr;
 
-        private Object _methodsStructure;
+        private Object _methodsStructure = null!;
 
         private FfiMethods Methods
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
                 return (FfiMethods)_methodsStructure;
             }
 
         }
 
-        public event EntitlementCreateHandler OnEntitlementCreate;
+        public event EntitlementCreateHandler OnEntitlementCreate = null!;
 
-        public event EntitlementDeleteHandler OnEntitlementDelete;
+        public event EntitlementDeleteHandler OnEntitlementDelete = null!;
 
         internal StoreManager(IntPtr ptr, IntPtr eventsPtr, ref FfiEvents events)
         {
@@ -3878,7 +3842,7 @@ namespace Discord
             var h = GCHandle.FromIntPtr(ptr);
             var callback = (FetchSkusHandler)h.Target;
             h.Free();
-            callback(result);
+            callback?.Invoke(result);
         }
 
         public void FetchSkus(FetchSkusHandler callback)
@@ -4083,10 +4047,7 @@ namespace Discord
         {
             get
             {
-                if (_methodsStructure == null)
-                {
-                    _methodsStructure = Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
-                }
+                _methodsStructure ??= Marshal.PtrToStructure(_methodsPtr, typeof(FfiMethods));
                 return (FfiMethods)_methodsStructure;
             }
 
@@ -4336,7 +4297,7 @@ namespace Discord
             var h = GCHandle.FromIntPtr(ptr);
             var callback = (SetUserAchievementHandler)h.Target;
             h.Free();
-            callback(result);
+            callback?.Invoke(result);
         }
 
         public void SetUserAchievement(Int64 achievementId, byte percentComplete, SetUserAchievementHandler callback)
@@ -4351,7 +4312,7 @@ namespace Discord
             var h = GCHandle.FromIntPtr(ptr);
             var callback = (FetchUserAchievementsHandler)h.Target;
             h.Free();
-            callback(result);
+            callback?.Invoke(result);
         }
 
         public void FetchUserAchievements(FetchUserAchievementsHandler callback)
@@ -4394,7 +4355,7 @@ namespace Discord
         {
             var h = GCHandle.FromIntPtr(ptr);
             var d = (Discord)h.Target;
-            d.AchievementManagerInstance.OnUserAchievementUpdate(ref userAchievement);
+            d?.AchievementManagerInstance.OnUserAchievementUpdate(ref userAchievement);
         }
     }
 }

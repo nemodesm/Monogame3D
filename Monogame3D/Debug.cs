@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Engine.Exceptions;
+using Monogame3D.Exceptions;
 
-namespace Engine
+namespace Monogame3D
 {
     public sealed class Debug : IDisposable, IAsyncDisposable
     {
@@ -28,6 +28,8 @@ namespace Engine
             var appDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/{ApplicationName}/";
 
             if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
+            
+            AttemptMovePreviousFile();
 
             // var logFile = File.Create(appDataPath + LogPath);
             _writer = new StreamWriter(appDataPath + LogPath, false)
@@ -36,12 +38,15 @@ namespace Engine
                 AutoFlush = true
             };
 
-            _writer.WriteLine($"{ApplicationName}: Application opened at {DateTime.Now}");
+            _writer.WriteLine($"{ApplicationName}: Application opened at {DateTime.Now}\n");
         }
 
         private void AttemptMovePreviousFile()
         {
             var appDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/{ApplicationName}/";
+
+            /*if (File.Exists(appDataPath + PreviousLogPath)) 
+                File.Delete(appDataPath + PreviousLogPath);*/
 
             if (File.Exists(appDataPath + LogPath))
                 File.Move(appDataPath + LogPath, appDataPath + PreviousLogPath, true);
@@ -55,13 +60,35 @@ namespace Engine
         public static void Initialise() => _instance = new Debug();
         private static void CheckInstance() => _instance ??= new Debug();
 
+#nullable enable
+        private static string GetPrefix()
+        {
+            var stackTrace = new StackTrace(2);
+            return $"{DateTime.Now}:{stackTrace.GetFrame(0)?.GetMethod()?.DeclaringType}";
+        }
+        
+        public static void Log(object? message, int logLevel)
+        {
+            CheckInstance();
+
+            var toLog = $"[{GetPrefix()}/INFO]: {message}\n";
+#if DEBUG
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(toLog);
+#endif
+
+            _instance._writer.WriteLine(toLog);
+        }
+
         public static void Log(object message)
         {
             CheckInstance();
 
-            var stackTrace = new StackTrace(1);
-
-            var toLog = $"[{stackTrace.GetFrame(0)?.GetMethod()?.DeclaringType}/INFO]: {message}";
+            var toLog = $"[{GetPrefix()}/INFO]: {message}\n";
+#if DEBUG
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(toLog);
+#endif
 
             _instance._writer.WriteLine(toLog);
         }
@@ -70,9 +97,11 @@ namespace Engine
         {
             CheckInstance();
 
-            var stackTrace = new StackTrace(1);
-
-            var toLog = $"[{stackTrace.GetFrame(0)?.GetMethod()?.DeclaringType}/WARN]: {message}";
+            var toLog = $"[{GetPrefix()}/WARN]: {message}\n";
+#if DEBUG
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(toLog);
+#endif
 
             _instance._writer.WriteLine(toLog);
         }
@@ -83,10 +112,15 @@ namespace Engine
 
             var stackTrace = new StackTrace(1);
 
-            var toLog = $"[{stackTrace.GetFrame(0)?.GetMethod()?.DeclaringType}/ERROR]: {message}\n{stackTrace}";
+            var toLog = $"[{GetPrefix()}/ERROR]: {message}\n{stackTrace}";
+#if DEBUG
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Error.WriteLine(toLog);
+#endif
 
-            _instance._writer.Write(toLog);
+            _instance._writer.WriteLine(toLog);
         }
+#nullable restore
 
         private void ReleaseUnmanagedResources()
         {

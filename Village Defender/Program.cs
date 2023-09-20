@@ -1,5 +1,3 @@
 ﻿
-using var game = new VillageDefender.VillageDefender();
+using var game = new VillageDefender.Game3D();
 game.Run();
-//using var game1 = new VillageDefender.Game3D();
-//game1.Run();

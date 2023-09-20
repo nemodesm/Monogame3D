@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Engine.InputSystem
+namespace Monogame3D.InputSystem
 {
     internal struct InputState
     {

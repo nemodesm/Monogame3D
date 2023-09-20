@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Engine.Exceptions
+namespace Monogame3D.Exceptions
 {
 	[Serializable]
 	public class DuplicateSingletonException : Exception

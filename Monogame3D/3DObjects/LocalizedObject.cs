@@ -1,11 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 
-namespace Engine._3DObjects
+namespace Monogame3D._3DObjects
 {
     public class LocalizedObject : IGameComponent
     {
-        protected readonly Game game;
+        protected readonly Engine game;
 
         public Vector3 Position;
         public Quaternion Rotation;
@@ -17,14 +17,11 @@ namespace Engine._3DObjects
             set => Rotation = QuaternionExtension.Euler(value);
         }
 
-        protected LocalizedObject([NotNull] Game game)
+        protected LocalizedObject([NotNull] Engine game)
         {
             this.game = game;
         }
 
-        public virtual void Initialize()
-        {
-            
-        }
+        public virtual void Initialize() { }
     }
 }

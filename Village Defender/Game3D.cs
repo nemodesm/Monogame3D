@@ -1,17 +1,12 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using Engine;
+﻿using Microsoft.Xna.Framework;
+using Monogame3D;
+using Monogame3D._3DObjects;
+using Monogame3D.UI;
+using Monogame3D.UI.Components;
 
 namespace VillageDefender
 {
-    internal class Game3D : Engine.Engine
+    internal class Game3D : Monogame3D.Engine
     {
         public Game3D() : base()
         {
@@ -20,12 +15,17 @@ namespace VillageDefender
 
         protected override void Initialize()
         {
+            // base.Initialise should exceptionally be called before any other methods in this specific instance
+            Canvas.AddElement(new UIElement(new Button(() => Debug.Log("Button Clicked")), new Image("defaultTexture", anchorPosition: AnchorPosition.Center)));
+            
             base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            // _model = Content.Load<Model>("MonoCube");
+            var renderer = new MeshRenderer(this, "MonoCube");
+            
+            ((LocalizedObject)renderer).Initialize();
 
             base.LoadContent();
         }

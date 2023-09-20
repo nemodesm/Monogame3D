@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Engine.Exceptions
+namespace Monogame3D.Exceptions
 {
     public class InvalidModelException : Exception
     {

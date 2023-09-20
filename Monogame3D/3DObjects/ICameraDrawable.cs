@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Engine._3DObjects
+namespace Monogame3D._3DObjects
 {
     public interface ICameraDrawable
     {

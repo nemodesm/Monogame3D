@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 
-namespace Engine._3DObjects
+namespace Monogame3D._3DObjects
 {
     public class Camera : LocalizedObject, IDrawable
     {
@@ -26,10 +26,11 @@ namespace Engine._3DObjects
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
 
-        public Camera([NotNull] Game game) : base(game)
+        public Camera([NotNull] Engine game) : base(game)
         {
+            Debug.Log("Initialised Camera");
         }
-        public Camera([NotNull] Game game, [NotNull] List<ICameraDrawable> drawnObjects) : base(game)
+        public Camera([NotNull] Engine game, [NotNull] List<ICameraDrawable> drawnObjects) : this(game)
         {
             this._drawnObjects = drawnObjects;
         }
@@ -60,6 +61,15 @@ namespace Engine._3DObjects
             //     Forward, Vector3.Up);
 
             base.Initialize();
+        }
+
+        public void RegisterCameraDrawable(ICameraDrawable drawable)
+        {
+            _drawnObjects.Add(drawable);
+        }
+        public void DeregisterCameraDrawable(ICameraDrawable drawable)
+        {
+            _drawnObjects.Remove(drawable);
         }
     }
 }

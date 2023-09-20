@@ -1,25 +1,43 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Engine.Exceptions;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Monogame3D.Exceptions;
 
-namespace Engine._3DObjects
+namespace Monogame3D._3DObjects
 {
-    internal class MeshRenderer : LocalizedObject, ICameraDrawable
+    public class MeshRenderer : LocalizedObject, ICameraDrawable
     {
         private readonly Model _model;
 
-        public MeshRenderer([NotNull] Game game, [NotNull] Model model) : base(game)
+        public MeshRenderer([NotNull] Engine game, [NotNull] Model model) : base(game)
         {
             this._model = model;
         }
 
-        public MeshRenderer([NotNull] Game game, string modelName) : base(game)
+        public MeshRenderer([NotNull] Engine game, string modelName) : base(game)
         {
-            this._model = game.Content.Load<Model>(modelName);
+            try
+            {
+                this._model = game.Content.Load<Model>(modelName);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+                return;
+            }
+            
+            game.Camera.RegisterCameraDrawable(this);
             
             if (this._model is null)
                 Debug.LogError(new InvalidModelException());
+        }
+
+        ~MeshRenderer()
+        {
+            // game.Content.UnloadAsset("MonoCube");
+            
+            game.Camera.DeregisterCameraDrawable(this);
         }
 
         void ICameraDrawable.Draw(GameTime gameTime, Camera camera)
