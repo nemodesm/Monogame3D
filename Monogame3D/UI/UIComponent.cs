@@ -70,16 +70,20 @@ namespace Monogame3D.UI
         public virtual bool Enabled
         {
             get => UIElement.Enabled;
-            set
-            {
-                EnabledChanged?.Invoke(this, EventArgs.Empty);
-                UIElement.Enabled = value;
-            }
+            set => UIElement.Enabled = value;
         }
 
         public virtual int UpdateOrder => UIElement.UpdateOrder;
-        public event EventHandler<EventArgs> EnabledChanged;
-        public event EventHandler<EventArgs> UpdateOrderChanged;
+        public event EventHandler<EventArgs> EnabledChanged
+        {
+            add => UIElement.EnabledChanged += value;
+            remove => UIElement.EnabledChanged -= value;
+        }
+        public event EventHandler<EventArgs> UpdateOrderChanged
+        {
+            add => UIElement.UpdateOrderChanged += value;
+            remove => UIElement.UpdateOrderChanged -= value;
+        }
 
         public virtual void Update(GameTime gameTime) { }
 

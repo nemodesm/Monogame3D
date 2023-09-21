@@ -7,6 +7,9 @@ namespace Monogame3D.UI.Components
 {
     public class Image : UIComponent
     {
+        /// <summary>
+        /// The texture that this image displays
+        /// </summary>
         private Texture2D image;
         /// <summary>
         /// The path to the texture that this image displays
@@ -17,7 +20,6 @@ namespace Monogame3D.UI.Components
         /// </summary>
         public Color ColorTint = Color.White;
 
-        public Image() : this("defaultTexture") { }
         public Image(string imagePath, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default)
         {
             this.imagePath = imagePath;

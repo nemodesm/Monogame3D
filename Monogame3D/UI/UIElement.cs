@@ -22,7 +22,7 @@ namespace Monogame3D.UI
 
         public virtual AnchorPosition AnchorPosition { get; set; }
         public virtual Vector2 Offset { get; set; }
-        public int childCount => _childUiElements.Count;
+        public int ChildCount => _childUiElements.Count;
 
         public bool Enabled
         {
