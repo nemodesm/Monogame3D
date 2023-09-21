@@ -10,16 +10,16 @@ namespace Monogame3D._3DObjects
     {
         private readonly Model _model;
 
-        public MeshRenderer([NotNull] Engine game, [NotNull] Model model) : base(game)
+        public MeshRenderer([NotNull] Model model)
         {
             this._model = model;
         }
 
-        public MeshRenderer([NotNull] Engine game, string modelName) : base(game)
+        public MeshRenderer(string modelName)
         {
             try
             {
-                this._model = game.Content.Load<Model>(modelName);
+                this._model = Engine.Content.Load<Model>(modelName);
             }
             catch (Exception e)
             {
@@ -27,7 +27,7 @@ namespace Monogame3D._3DObjects
                 return;
             }
             
-            game.Camera.RegisterCameraDrawable(this);
+            Engine.Camera.RegisterCameraDrawable(this);
             
             if (this._model is null)
                 Debug.LogError(new InvalidModelException());
@@ -37,7 +37,7 @@ namespace Monogame3D._3DObjects
         {
             // game.Content.UnloadAsset("MonoCube");
             
-            game.Camera.DeregisterCameraDrawable(this);
+            Engine.Camera.DeregisterCameraDrawable(this);
         }
 
         void ICameraDrawable.Draw(GameTime gameTime, Camera camera)

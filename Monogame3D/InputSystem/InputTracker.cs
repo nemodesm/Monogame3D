@@ -20,7 +20,6 @@ namespace Monogame3D.InputSystem
         /// </summary>
         public InputState PreviousFrame => _previousFrame;
 
-        private InputTracker() : base(null) => Debug.LogError(new ApplicationException());
         private InputTracker(Game game) : base(game)
         {
             if (Instance is not null)
@@ -31,7 +30,7 @@ namespace Monogame3D.InputSystem
         }
 
         /// <summary>
-        /// Alternative to <see cref="Initialise(Game)"/>
+        /// Alternative to <see cref="Monogame3D.InputSystem.InputTracker.Initialise(Game)"/>
         /// </summary>
         /// <param name="game">The game that this will handle input for</param>
         /// <returns>The Input object that is created</returns>
@@ -41,7 +40,7 @@ namespace Monogame3D.InputSystem
         }
 
         /// <summary>
-        /// Alternative to <see cref="CreateInstance(Game)"/>
+        /// Alternative to <see cref="Monogame3D.InputSystem.InputTracker.CreateInstance(Game)"/>
         /// </summary>
         /// <param name="game">The game that this will handle input for</param>
         /// <returns>The Input object that is created</returns>

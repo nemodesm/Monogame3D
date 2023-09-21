@@ -7,12 +7,25 @@ namespace Monogame3D
 {
     public abstract class Engine : Game
     {
-        protected internal readonly GraphicsDeviceManager Graphics;
+        public static Engine Instance { get; private set; }
+        
+        public static GraphicsDeviceManager Graphics { get; private set; }
 
-        public Camera Camera { get; private set; }
-        public Canvas Canvas { get; private set; }
+        public static Camera Camera { get; private set; }
+        public static Canvas Canvas { get; private set; }
 
         protected Engine()
+        {
+            Instance = this;
+
+            SetupGraphics();
+            
+            InitializeHelperClasses();
+
+            InitializeRootComponents();
+        }
+
+        private void SetupGraphics()
         {
             Graphics = new GraphicsDeviceManager(this);
 
@@ -20,16 +33,12 @@ namespace Monogame3D
             IsMouseVisible = true;
             
             Content.RootDirectory = "Content";
-            
-            InitializeHelperClasses();
-
-            InitializeRootComponents();
         }
 
         private void InitializeRootComponents()
         {
-            Camera = new Camera(this);
-            Canvas = new Canvas(this);
+            Camera = new Camera();
+            Canvas = new Canvas();
             
             Components.Add(Camera);
             Components.Add(Canvas);
@@ -38,12 +47,23 @@ namespace Monogame3D
 
         private void InitializeHelperClasses()
         {
-            Debug.Initialise();
+            // Debug.Initialise();
         }
 
         protected override void Initialize()
         {
+            Graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+            Graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+            Graphics.IsFullScreen = true;
+            Graphics.ApplyChanges();
+            
             base.Initialize();
+        }
+
+        protected override void UnloadContent()
+        {
+            ContentManager.Unload();
+            base.UnloadContent();
         }
 
         protected sealed override void Draw(GameTime gameTime) => base.Draw(gameTime);

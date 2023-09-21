@@ -8,25 +8,41 @@ namespace Monogame3D.UI
     // ReSharper disable once InconsistentNaming
     public class UIElement : ICanvasDrawable, IUpdateable
     {
-        protected readonly HashSet<UIElement> _childUiElements = new();
+        public string name;
+        protected readonly List<UIElement> _childUiElements = new();
         /// <summary>
         /// The list of components that are attached to this UI element
         /// </summary>
         protected readonly HashSet<UIComponent> _components = new();
 
         private UIElement _parent;
+        private bool _enabled;
         protected internal Canvas Canvas => _parent is null ? this as Canvas : _parent.Canvas;
+        protected static Engine Engine => Engine.Instance;
 
         public virtual AnchorPosition AnchorPosition { get; set; }
         public virtual Vector2 Offset { get; set; }
+        public int childCount => _childUiElements.Count;
 
-        public bool Enabled { get; set; }
+        public bool Enabled
+        {
+            get => _enabled;
+            set
+            {
+                EnabledChanged?.Invoke(this, EventArgs.Empty);
+                _enabled = value;
+            }
+        }
+
         public int UpdateOrder { get; }
         public event EventHandler<EventArgs> EnabledChanged;
         public event EventHandler<EventArgs> UpdateOrderChanged;
 
-        public UIElement(params UIComponent[] components)
+        public UIElement(params UIComponent[] components) : this("New UI Element", components) { }
+        public UIElement(string name, params UIComponent[] components)
         {
+            this.name = name;
+            
             foreach (var component in components)
             {
                 component.UIElement = this;
@@ -63,6 +79,33 @@ namespace Monogame3D.UI
         {
             element._parent = this;
             _childUiElements.Add(element);
+        }
+
+        /// <summary>
+        /// Removes the UI Element from the canvas
+        /// </summary>
+        /// <param name="element">The element to remove as child</param>
+        public void RemoveElement(UIElement element)
+        {
+            if (element._parent != this)
+            {
+                Debug.LogError(new InvalidOperationException(
+                    $"Attempted to remove {element} from children of {this} when it was not a child to " +
+                    "begin with"));
+            }
+            element._parent = null;
+            _childUiElements.Remove(element);
+        }
+        
+        public UIElement GetChild(int i)
+        {
+            if (i >= _childUiElements.Count)
+            {
+                Debug.LogError(
+                    $"Could not get child at index{i} from UI element with only {_childUiElements.Count} children");
+                return null;
+            }
+            return _childUiElements[i];
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)

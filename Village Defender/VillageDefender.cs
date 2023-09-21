@@ -21,8 +21,6 @@ namespace VillageDefender
         {
             // TODO: Add your initialization logic here
 
-            Debug.Initialise();
-
             Debug.Log("this is a log");
             Debug.LogWarning("this is a warn");
             Debug.LogError("this is an error");

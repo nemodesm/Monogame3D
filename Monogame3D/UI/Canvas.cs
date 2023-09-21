@@ -6,7 +6,6 @@ namespace Monogame3D.UI
 {
     public sealed class Canvas : UIElement, IGameComponent, IDrawable
     {
-        protected internal Engine Engine;
         private Viewport viewport;
         private SpriteBatch _spriteBatch;
 
@@ -15,10 +14,8 @@ namespace Monogame3D.UI
 
         private bool initialized;
 
-        internal Canvas(Engine game)
+        internal Canvas()
         {
-            Engine = game;
-            
             Debug.Log("Initialised Canvas");
         }
 
@@ -50,10 +47,7 @@ namespace Monogame3D.UI
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
 
-        [Obsolete("Cannot add components to the root canvas object", true)]
-        public override void AddComponent(UIComponent component)
-        {
-            Debug.LogError("Cannot add components to the root canvas object");
-        }
+        // [Obsolete("Cannot add components to the root canvas object", true)]
+        public override void AddComponent(UIComponent component) => Debug.LogError("Cannot add components to the root canvas object");
     }
 }

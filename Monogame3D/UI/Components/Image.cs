@@ -8,6 +8,9 @@ namespace Monogame3D.UI.Components
     public class Image : UIComponent
     {
         private Texture2D image;
+        /// <summary>
+        /// The path to the texture that this image displays
+        /// </summary>
         private readonly string imagePath;
         /// <summary>
         /// Tint that will be applied to the game
@@ -18,8 +21,17 @@ namespace Monogame3D.UI.Components
         public Image(string imagePath, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default)
         {
             this.imagePath = imagePath;
+            if (anchorPosition == AnchorPosition.Absolute)
+            {
+                Debug.LogWarning($"Drawing {this} with absolute positioning");
+            }
             this.AnchorPosition = anchorPosition;
             this.Offset = offset;
+        }
+
+        ~Image()
+        {
+            ContentManager.UnloadAsset(imagePath, this);
         }
         
         public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -32,8 +44,8 @@ namespace Monogame3D.UI.Components
                     return;
                 }
 
-                var (screenX, screenY) = (Canvas.Engine.Graphics.PreferredBackBufferWidth,
-                    Canvas.Engine.Graphics.PreferredBackBufferHeight);
+                var (screenX, screenY) = (Engine.Graphics.PreferredBackBufferWidth,
+                    Engine.Graphics.PreferredBackBufferHeight);
                 Vector2 position = default;
                 position.X = AnchorPosition switch
                 {
@@ -58,7 +70,7 @@ namespace Monogame3D.UI.Components
                     _ => position.Y
                 };
 
-                spriteBatch.Draw(image, position, ColorTint);
+                spriteBatch.Draw(image, position + Offset, ColorTint);
             }
             catch (ArgumentNullException e)
             {
@@ -70,7 +82,7 @@ namespace Monogame3D.UI.Components
         {
             try
             {
-                image = Canvas.Engine.Content.Load<Texture2D>(imagePath);
+                image = ContentManager.RequestContent<Texture2D>(imagePath, this);
             }
             catch (ContentLoadException e)
             {

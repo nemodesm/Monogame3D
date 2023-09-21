@@ -26,18 +26,18 @@ namespace Monogame3D._3DObjects
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
 
-        public Camera([NotNull] Engine game) : base(game)
+        public Camera()
         {
             Debug.Log("Initialised Camera");
         }
-        public Camera([NotNull] Engine game, [NotNull] List<ICameraDrawable> drawnObjects) : this(game)
+        public Camera([NotNull] List<ICameraDrawable> drawnObjects) : this()
         {
             this._drawnObjects = drawnObjects;
         }
 
         public void Draw(GameTime gameTime)
         {
-            game.GraphicsDevice.Clear(_clearColor);
+            Engine.GraphicsDevice.Clear(_clearColor);
 
             foreach (var drawable in _drawnObjects)
             {
@@ -52,7 +52,7 @@ namespace Monogame3D._3DObjects
             Position = new Vector3(0f, 1f, -10);
 
             ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
-                MathHelper.ToRadians(45f), game.GraphicsDevice.Viewport.AspectRatio,
+                MathHelper.ToRadians(45f), Engine.GraphicsDevice.Viewport.AspectRatio,
                 1f, 1000f);
             // TODO: _camTarget need to be replaced with PositionedObject.Forward (which is not implemented)
             // ViewMatrix = Matrix.CreateLookAt(Position, _camTarget,

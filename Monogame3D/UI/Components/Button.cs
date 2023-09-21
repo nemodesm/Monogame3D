@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Monogame3D.InputSystem;
 
 namespace Monogame3D.UI.Components
 {
-    public class Button : UIComponent, ISubmitHandler, ISelectable
+    public class Button : SelectableUIComponent
     {
         /// <summary>
-        /// A generic event 
+        /// A generic event
         /// </summary>
-        public class ButtonSelectEvent
+        public class ButtonEvent
         {
             private Action _action;
 
-            public ButtonSelectEvent() { }
-            internal ButtonSelectEvent(Action action)
+            public ButtonEvent() { }
+            internal ButtonEvent(Action action)
             {
                 this._action = action;
             }
@@ -45,44 +43,34 @@ namespace Monogame3D.UI.Components
             }
         }
 
+        // ReSharper disable once InconsistentNaming
         /// <summary>
-        /// Whether or not the button can be clicked
-        /// </summary>
-        public bool IsSelectable => Enabled;
-
-        /// <summary>
-        /// 
+        /// Event that is called when the button is clicked
         /// </summary>
         [NotNull]
-        public ButtonSelectEvent OnSelect;
+        public readonly ButtonEvent OnSubmit = new();
 
-        public Button(Action selectAction, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 size = default, Vector2 offset = default)
-        {
-            this.OnSelect = new ButtonSelectEvent(selectAction);
-        }
-        public Button()
-        {
-            this.OnSelect = new ButtonSelectEvent();
-        }
+        private Vector2 _size;
 
-        public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public Button(Action selectAction, Vector2 size = default, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default)
+        {
+            this.OnSubmit = new ButtonEvent(selectAction);
+            this._size = size;
+            this.AnchorPosition = anchorPosition;
+            this.Offset = offset;
+        }
+        public Button() { }
+
+        /// <inheritdoc />
+        public override void Select()
         {
             // TODO
         }
 
-        public void OnSubmit()
+        /// <inheritdoc />
+        public override void Submit()
         {
-            OnSelect.Invoke();
-        }
-
-        public void Select()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Deselect()
-        {
-            throw new NotImplementedException();
+            OnSubmit.Invoke();
         }
     }
 }

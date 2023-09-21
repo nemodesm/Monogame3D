@@ -13,6 +13,7 @@ namespace Monogame3D.UI
         // ReSharper disable once InconsistentNaming
         protected internal UIElement UIElement { get; set; }
         protected Canvas Canvas => UIElement.Canvas;
+        protected static Engine Engine => Engine.Instance;
         private bool _initialized;
 
         private AnchorPosition _anchorPosition;
@@ -69,8 +70,13 @@ namespace Monogame3D.UI
         public virtual bool Enabled
         {
             get => UIElement.Enabled;
-            set => UIElement.Enabled = value;
+            set
+            {
+                EnabledChanged?.Invoke(this, EventArgs.Empty);
+                UIElement.Enabled = value;
+            }
         }
+
         public virtual int UpdateOrder => UIElement.UpdateOrder;
         public event EventHandler<EventArgs> EnabledChanged;
         public event EventHandler<EventArgs> UpdateOrderChanged;
@@ -81,6 +87,7 @@ namespace Monogame3D.UI
 
         internal virtual void Initialise()
         {
+            _initialized = true;
             AnchorPosition = _anchorPosition;
             Offset = _offset;
         }

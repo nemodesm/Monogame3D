@@ -2,6 +2,6 @@
 {
     internal interface ISubmitHandler
     {
-        public void OnSubmit();
+        public void Submit();
     }
 }
