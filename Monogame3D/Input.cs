@@ -7,19 +7,17 @@ namespace Monogame3D
     {
         public static bool GetKeyDown(Keys key)
         {
-            return InputTracker.Instance.Current._keyboardState.IsKeyDown(key) &&
-                InputTracker.Instance.PreviousFrame._keyboardState.IsKeyUp(key);
+            return MInput.Keyboard.Pressed(key);
         }
 
         public static bool GetKey(Keys key)
         {
-            return InputTracker.Instance.Current._keyboardState.IsKeyDown(key);
+            return MInput.Keyboard.Check(key);
         }
 
         public static bool GetKeyUp(Keys key)
         {
-            return InputTracker.Instance.Current._keyboardState.IsKeyUp(key) &&
-                InputTracker.Instance.PreviousFrame._keyboardState.IsKeyDown(key);
+            return MInput.Keyboard.Released(key);
         }
 
         public static float GetAxis(AxisDefinition axis)
