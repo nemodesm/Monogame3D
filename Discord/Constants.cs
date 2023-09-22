@@ -1,7 +1,6 @@
-﻿namespace Discord
+﻿namespace Discord;
+
+static class Constants
 {
-    static class Constants
-    {
-        public const string DllName = "Discord";
-    }
+    public const string DllName = "Discord";
 }

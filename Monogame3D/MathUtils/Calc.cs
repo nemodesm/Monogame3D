@@ -9,10 +9,7 @@ public static class Calc
 
     public static float SignThreshold(float value, float threshold)
     {
-        if (Math.Abs(value) >= threshold)
-            return Math.Sign(value);
-        else
-            return 0;
+        return Math.Abs(value) >= threshold ? Math.Sign(value) : 0;
     }
 
 
@@ -32,18 +29,18 @@ public static class Calc
 
     public static Vector2 SnappedNormal(this Vector2 vec, float slices)
     {
-        float divider = MathHelper.TwoPi / slices;
+        var divider = MathHelper.TwoPi / slices;
 
-        float angle = vec.Angle();
+        var angle = vec.Angle();
         angle = (float)Math.Floor((angle + divider / 2f) / divider) * divider;
         return AngleToVector(angle, 1f);
     }
 
     public static Vector2 Snapped(this Vector2 vec, float slices)
     {
-        float divider = MathHelper.TwoPi / slices;
+        var divider = MathHelper.TwoPi / slices;
 
-        float angle = vec.Angle();
+        var angle = vec.Angle();
         angle = (float)Math.Floor((angle + divider / 2f) / divider) * divider;
         return AngleToVector(angle, vec.Length());
     }

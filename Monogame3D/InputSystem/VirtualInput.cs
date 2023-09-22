@@ -5,8 +5,8 @@
 /// </summary>
 public abstract class VirtualInput
 {
-    public enum OverlapBehaviors { CancelOut, TakeOlder, TakeNewer };
-    public enum ThresholdModes { LargerThan, LessThan, EqualTo };
+    public enum OverlapBehaviors { CancelOut, TakeOlder, TakeNewer }
+    public enum ThresholdModes { LargerThan, LessThan, EqualTo }
 
     public VirtualInput()
     {

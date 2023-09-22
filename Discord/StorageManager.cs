@@ -1,17 +1,16 @@
-namespace Discord
+namespace Discord;
+
+[Obsolete]
+public partial class StorageManager
 {
-    [Obsolete]
-    public partial class StorageManager
+    public IEnumerable<FileStat> Files()
     {
-        public IEnumerable<FileStat> Files()
+        var fileCount = Count();
+        var files = new List<FileStat>();
+        for (var i = 0; i < fileCount; i++)
         {
-            var fileCount = Count();
-            var files = new List<FileStat>();
-            for (var i = 0; i < fileCount; i++)
-            {
-                files.Add(StatAt(i));
-            }
-            return files;
+            files.Add(StatAt(i));
         }
+        return files;
     }
 }

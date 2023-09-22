@@ -28,7 +28,7 @@ public static class MInput
         Keyboard = new KeyboardData();
         Mouse = new MouseData();
         GamePads = new GamePadData[4];
-        for (int i = 0; i < 4; i++)
+        for (var i = 0; i < 4; i++)
             GamePads[i] = new GamePadData((PlayerIndex)i);
         VirtualInputs = new List<VirtualInput>();
     }
@@ -52,14 +52,14 @@ public static class MInput
             Keyboard.Update();
             Mouse.Update();
 
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
                 GamePads[i].Update();
         }
         else
         {
             Keyboard.UpdateNull();
             Mouse.UpdateNull();
-            for (int i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
                 GamePads[i].UpdateNull();
         }
 
@@ -73,7 +73,7 @@ public static class MInput
     {
         Keyboard.UpdateNull();
         Mouse.UpdateNull();
-        for (int i = 0; i < 4; i++)
+        for (var i = 0; i < 4; i++)
             GamePads[i].UpdateNull();
 
         UpdateVirtualInputs();
@@ -135,10 +135,7 @@ public static class MInput
         /// <returns>Whether the is key pressed</returns>
         public bool Check(Keys key)
         {
-            if (Disabled)
-                return false;
-
-            return CurrentState.IsKeyDown(key);
+            return !Disabled && CurrentState.IsKeyDown(key);
         }
 
         /// <summary>
@@ -256,13 +253,12 @@ public static class MInput
             {
                 if (Check(positive))
                     return 0;
-                else
-                    return -1;
+                return -1;
             }
-            else if (Check(positive))
+
+            if (Check(positive))
                 return 1;
-            else
-                return 0;
+            return 0;
         }
 
         /// <summary>
@@ -281,13 +277,10 @@ public static class MInput
             {
                 if (Check(positive))
                     return both;
-                else
-                    return -1;
+                return -1;
             }
-            else if (Check(positive))
-                return 1;
-            else
-                return 0;
+
+            return Check(positive) ? 1 : 0;
         }
 
         #endregion
@@ -621,7 +614,7 @@ public static class MInput
         /// </summary>
         public Vector2 GetLeftStick()
         {
-            Vector2 ret = CurrentState.ThumbSticks.Left;
+            var ret = CurrentState.ThumbSticks.Left;
             ret.Y = -ret.Y;
             return ret;
         }
@@ -631,7 +624,7 @@ public static class MInput
         /// </summary>
         public Vector2 GetLeftStick(float deadzone)
         {
-            Vector2 ret = CurrentState.ThumbSticks.Left;
+            var ret = CurrentState.ThumbSticks.Left;
             if (ret.LengthSquared() < deadzone * deadzone)
                 ret = Vector2.Zero;
             else
@@ -644,7 +637,7 @@ public static class MInput
         /// </summary>
         public Vector2 GetRightStick()
         {
-            Vector2 ret = CurrentState.ThumbSticks.Right;
+            var ret = CurrentState.ThumbSticks.Right;
             ret.Y = -ret.Y;
             return ret;
         }
@@ -654,7 +647,7 @@ public static class MInput
         /// </summary>
         public Vector2 GetRightStick(float deadzone)
         {
-            Vector2 ret = CurrentState.ThumbSticks.Right;
+            var ret = CurrentState.ThumbSticks.Right;
             if (ret.LengthSquared() < deadzone * deadzone)
                 ret = Vector2.Zero;
             else
@@ -765,11 +758,10 @@ public static class MInput
         /// </summary>
         public float LeftStickHorizontal(float deadzone)
         {
-            float h = CurrentState.ThumbSticks.Left.X;
+            var h = CurrentState.ThumbSticks.Left.X;
             if (Math.Abs(h) < deadzone)
                 return 0;
-            else
-                return h;
+            return h;
         }
 
         /// <summary>
@@ -777,11 +769,10 @@ public static class MInput
         /// </summary>
         public float LeftStickVertical(float deadzone)
         {
-            float v = CurrentState.ThumbSticks.Left.Y;
+            var v = CurrentState.ThumbSticks.Left.Y;
             if (Math.Abs(v) < deadzone)
                 return 0;
-            else
-                return -v;
+            return -v;
         }
 
         #endregion
@@ -889,11 +880,10 @@ public static class MInput
         /// </summary>
         public float RightStickHorizontal(float deadzone)
         {
-            float h = CurrentState.ThumbSticks.Right.X;
+            var h = CurrentState.ThumbSticks.Right.X;
             if (Math.Abs(h) < deadzone)
                 return 0;
-            else
-                return h;
+            return h;
         }
 
         /// <summary>
@@ -901,11 +891,10 @@ public static class MInput
         /// </summary>
         public float RightStickVertical(float deadzone)
         {
-            float v = CurrentState.ThumbSticks.Right.Y;
+            var v = CurrentState.ThumbSticks.Right.Y;
             if (Math.Abs(v) < deadzone)
                 return 0;
-            else
-                return -v;
+            return -v;
         }
 
         #endregion
@@ -920,7 +909,7 @@ public static class MInput
         public int DPadHorizontal =>
             CurrentState.DPad.Right == ButtonState.Pressed
                 ? 1
-                : (CurrentState.DPad.Left == ButtonState.Pressed ? -1 : 0);
+                : CurrentState.DPad.Left == ButtonState.Pressed ? -1 : 0;
 
         /// <summary>
         /// TODO: Add description
@@ -928,7 +917,7 @@ public static class MInput
         public int DPadVertical =>
             CurrentState.DPad.Down == ButtonState.Pressed
                 ? 1
-                : (CurrentState.DPad.Up == ButtonState.Pressed ? -1 : 0);
+                : CurrentState.DPad.Up == ButtonState.Pressed ? -1 : 0;
 
         /// <summary>
         /// TODO: Add description
@@ -1093,13 +1082,12 @@ public static class MInput
         {
             if (positive)
                 return bothValue;
-            else
-                return -1;
+            return -1;
         }
-        else if (positive)
+
+        if (positive)
             return 1;
-        else
-            return 0;
+        return 0;
     }
 
     /// <summary>
@@ -1109,8 +1097,7 @@ public static class MInput
     {
         if (Math.Abs(axisValue) >= deadzone)
             return Math.Sign(axisValue);
-        else
-            return 0;
+        return 0;
     }
 
     /// <summary>
@@ -1118,7 +1105,7 @@ public static class MInput
     /// </summary>
     public static int Axis(bool negative, bool positive, int bothValue, float axisValue, float deadzone)
     {
-        int ret = Axis(axisValue, deadzone);
+        var ret = Axis(axisValue, deadzone);
         if (ret == 0)
             ret = Axis(negative, positive, bothValue);
         return ret;

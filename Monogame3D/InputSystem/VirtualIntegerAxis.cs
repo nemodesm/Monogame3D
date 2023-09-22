@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Monogame3D.InputSystem;
 
@@ -30,14 +31,10 @@ public class VirtualIntegerAxis : VirtualInput
 
         PreviousValue = Value;
         Value = 0;
-        foreach (var node in Nodes)
+        foreach (var value in Nodes.Select(node => node.Value).Where(value => value != 0))
         {
-            float value = node.Value;
-            if (value != 0)
-            {
-                Value = Math.Sign(value);
-                break;
-            }
+            Value = Math.Sign(value);
+            break;
         }
     }
 

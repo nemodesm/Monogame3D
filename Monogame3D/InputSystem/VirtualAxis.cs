@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework.Input;
 using Monogame3D.MathUtils;
 
@@ -31,14 +32,10 @@ public class VirtualAxis : VirtualInput
 
         PreviousValue = Value;
         Value = 0;
-        foreach (var node in Nodes)
+        foreach (var value in Nodes.Select(node => node.Value).Where(value => value != 0))
         {
-            float value = node.Value;
-            if (value != 0)
-            {
-                Value = value;
-                break;
-            }
+            Value = value;
+            break;
         }
     }
 
@@ -123,10 +120,9 @@ public class VirtualAxis : VirtualInput
             {
                 if (MInput.GamePads[GamepadIndex].DPadRightCheck)
                     return 1f;
-                else if (MInput.GamePads[GamepadIndex].DPadLeftCheck)
+                if (MInput.GamePads[GamepadIndex].DPadLeftCheck)
                     return -1f;
-                else
-                    return 0;
+                return 0;
             }
         }
     }
@@ -146,10 +142,9 @@ public class VirtualAxis : VirtualInput
             {
                 if (MInput.GamePads[GamepadIndex].DPadDownCheck)
                     return 1f;
-                else if (MInput.GamePads[GamepadIndex].DPadUpCheck)
+                if (MInput.GamePads[GamepadIndex].DPadUpCheck)
                     return -1f;
-                else
-                    return 0;
+                return 0;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework.Input;
 
 namespace Monogame3D.InputSystem;
@@ -48,9 +49,9 @@ public class VirtualButton : VirtualInput
 
     public void SetRepeat(float firstRepeatTime, float multiRepeatTime)
     {
-        this._firstRepeatTime = firstRepeatTime;
-        this._multiRepeatTime = multiRepeatTime;
-        _canRepeat = (this._firstRepeatTime > 0);
+        _firstRepeatTime = firstRepeatTime;
+        _multiRepeatTime = multiRepeatTime;
+        _canRepeat = _firstRepeatTime > 0;
         if (!_canRepeat)
             Repeating = false;
     }
@@ -60,7 +61,7 @@ public class VirtualButton : VirtualInput
         _consumed = false;
         _bufferCounter -= Engine.DeltaTime;
 
-        bool check = false;
+        var check = false;
         foreach (var node in Nodes)
         {
             node.Update();
@@ -507,16 +508,16 @@ public class VirtualButton : VirtualInput
             LargerThan,
             LessThan,
             Equals
-        };
+        }
 
-        public VirtualInput.ThresholdModes Mode;
+        public ThresholdModes Mode;
         public float Threshold;
 
         private VirtualAxis _axis;
 
-        public VirtualAxisTrigger(VirtualAxis axis, VirtualInput.ThresholdModes mode, float threshold)
+        public VirtualAxisTrigger(VirtualAxis axis, ThresholdModes mode, float threshold)
         {
-            this._axis = axis;
+            _axis = axis;
             Mode = mode;
             Threshold = threshold;
         }
@@ -525,12 +526,12 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
-                    return _axis.Value >= Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
-                    return _axis.Value <= Threshold;
-                else
-                    return _axis.Value == Threshold;
+                return Mode switch
+                {
+                    ThresholdModes.LargerThan => _axis.Value >= Threshold,
+                    ThresholdModes.LessThan => _axis.Value <= Threshold,
+                    _ => Math.Abs(_axis.Value - Threshold) < float.Epsilon
+                };
             }
         }
 
@@ -538,12 +539,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _axis.Value >= Threshold && _axis.PreviousValue < Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _axis.Value <= Threshold && _axis.PreviousValue > Threshold;
-                else
-                    return _axis.Value == Threshold && _axis.PreviousValue != Threshold;
+                return _axis.Value == Threshold && _axis.PreviousValue != Threshold;
             }
         }
 
@@ -551,12 +551,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _axis.Value < Threshold && _axis.PreviousValue >= Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _axis.Value > Threshold && _axis.PreviousValue <= Threshold;
-                else
-                    return _axis.Value != Threshold && _axis.PreviousValue == Threshold;
+                return _axis.Value != Threshold && _axis.PreviousValue == Threshold;
             }
         }
     }
@@ -568,16 +567,16 @@ public class VirtualButton : VirtualInput
             LargerThan,
             LessThan,
             Equals
-        };
+        }
 
-        public VirtualInput.ThresholdModes Mode;
+        public ThresholdModes Mode;
         public int Threshold;
 
         private VirtualIntegerAxis _axis;
 
-        public VirtualIntegerAxisTrigger(VirtualIntegerAxis axis, VirtualInput.ThresholdModes mode, int threshold)
+        public VirtualIntegerAxisTrigger(VirtualIntegerAxis axis, ThresholdModes mode, int threshold)
         {
-            this._axis = axis;
+            _axis = axis;
             Mode = mode;
             Threshold = threshold;
         }
@@ -586,12 +585,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _axis.Value >= Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _axis.Value <= Threshold;
-                else
-                    return _axis.Value == Threshold;
+                return _axis.Value == Threshold;
             }
         }
 
@@ -599,12 +597,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _axis.Value >= Threshold && _axis.PreviousValue < Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _axis.Value <= Threshold && _axis.PreviousValue > Threshold;
-                else
-                    return _axis.Value == Threshold && _axis.PreviousValue != Threshold;
+                return _axis.Value == Threshold && _axis.PreviousValue != Threshold;
             }
         }
 
@@ -612,12 +609,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _axis.Value < Threshold && _axis.PreviousValue >= Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _axis.Value > Threshold && _axis.PreviousValue <= Threshold;
-                else
-                    return _axis.Value != Threshold && _axis.PreviousValue == Threshold;
+                return _axis.Value != Threshold && _axis.PreviousValue == Threshold;
             }
         }
     }
@@ -629,16 +625,16 @@ public class VirtualButton : VirtualInput
             LargerThan,
             LessThan,
             Equals
-        };
+        }
 
-        public VirtualInput.ThresholdModes Mode;
+        public ThresholdModes Mode;
         public float Threshold;
 
         private VirtualJoystick _joystick;
 
-        public VirtualJoystickXTrigger(VirtualJoystick joystick, VirtualInput.ThresholdModes mode, float threshold)
+        public VirtualJoystickXTrigger(VirtualJoystick joystick, ThresholdModes mode, float threshold)
         {
-            this._joystick = joystick;
+            _joystick = joystick;
             Mode = mode;
             Threshold = threshold;
         }
@@ -647,12 +643,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _joystick.Value.X >= Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _joystick.Value.X <= Threshold;
-                else
-                    return _joystick.Value.X == Threshold;
+                return _joystick.Value.X == Threshold;
             }
         }
 
@@ -660,12 +655,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _joystick.Value.X >= Threshold && _joystick.PreviousValue.X < Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _joystick.Value.X <= Threshold && _joystick.PreviousValue.X > Threshold;
-                else
-                    return _joystick.Value.X == Threshold && _joystick.PreviousValue.X != Threshold;
+                return _joystick.Value.X == Threshold && _joystick.PreviousValue.X != Threshold;
             }
         }
 
@@ -673,26 +667,25 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _joystick.Value.X < Threshold && _joystick.PreviousValue.X >= Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _joystick.Value.X > Threshold && _joystick.PreviousValue.X <= Threshold;
-                else
-                    return _joystick.Value.X != Threshold && _joystick.PreviousValue.X == Threshold;
+                return _joystick.Value.X != Threshold && _joystick.PreviousValue.X == Threshold;
             }
         }
     }
 
     public class VirtualJoystickYTrigger : Node
     {
-        public VirtualInput.ThresholdModes Mode;
+        public ThresholdModes Mode;
         public float Threshold;
 
         private VirtualJoystick _joystick;
 
-        public VirtualJoystickYTrigger(VirtualJoystick joystick, VirtualInput.ThresholdModes mode, float threshold)
+        public VirtualJoystickYTrigger(VirtualJoystick joystick, ThresholdModes mode, float threshold)
         {
-            this._joystick = joystick;
+            _joystick = joystick;
             Mode = mode;
             Threshold = threshold;
         }
@@ -701,12 +694,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _joystick.Value.X >= Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _joystick.Value.X <= Threshold;
-                else
-                    return _joystick.Value.X == Threshold;
+                return _joystick.Value.X == Threshold;
             }
         }
 
@@ -714,12 +706,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _joystick.Value.X >= Threshold && _joystick.PreviousValue.X < Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _joystick.Value.X <= Threshold && _joystick.PreviousValue.X > Threshold;
-                else
-                    return _joystick.Value.X == Threshold && _joystick.PreviousValue.X != Threshold;
+                return _joystick.Value.X == Threshold && _joystick.PreviousValue.X != Threshold;
             }
         }
 
@@ -727,12 +718,11 @@ public class VirtualButton : VirtualInput
         {
             get
             {
-                if (Mode == VirtualInput.ThresholdModes.LargerThan)
+                if (Mode == ThresholdModes.LargerThan)
                     return _joystick.Value.X < Threshold && _joystick.PreviousValue.X >= Threshold;
-                else if (Mode == VirtualInput.ThresholdModes.LessThan)
+                if (Mode == ThresholdModes.LessThan)
                     return _joystick.Value.X > Threshold && _joystick.PreviousValue.X <= Threshold;
-                else
-                    return _joystick.Value.X != Threshold && _joystick.PreviousValue.X == Threshold;
+                return _joystick.Value.X != Threshold && _joystick.PreviousValue.X == Threshold;
             }
         }
     }

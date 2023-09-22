@@ -1,15 +1,15 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
-namespace Monogame3D.Exceptions
+namespace Monogame3D.Exceptions;
+
+[Serializable]
+public class DuplicateSingletonException : Exception
 {
-	[Serializable]
-	public class DuplicateSingletonException : Exception
-	{
-		public DuplicateSingletonException() { }
-		public DuplicateSingletonException(string message) : base(message) { }
-		public DuplicateSingletonException(string message, Exception inner) : base(message, inner) { }
-		protected DuplicateSingletonException(
-		  System.Runtime.Serialization.SerializationInfo info,
-		  System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-	}
+    public DuplicateSingletonException() { }
+    public DuplicateSingletonException(string message) : base(message) { }
+    public DuplicateSingletonException(string message, Exception inner) : base(message, inner) { }
+    protected DuplicateSingletonException(
+        SerializationInfo info,
+        StreamingContext context) : base(info, context) { }
 }

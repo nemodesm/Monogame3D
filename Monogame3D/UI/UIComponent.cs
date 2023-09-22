@@ -2,98 +2,79 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Monogame3D.UI
+namespace Monogame3D.UI;
+
+/// <summary>
+/// A component that can be attached to a UI Element and will receive calls to Draw and Update from the canvas
+/// </summary>
+public abstract class UIComponent : IUpdateable, ICanvasDrawable
 {
-    /// <summary>
-    /// A component that can be attached to a UI Element and will receive calls to Draw and Update from the canvas
-    /// </summary>
-    // ReSharper disable once InconsistentNaming
-    public abstract class UIComponent : IUpdateable, ICanvasDrawable
-    {
-        // ReSharper disable once InconsistentNaming
-        protected internal UIElement UIElement { get; set; }
-        protected Canvas Canvas => UIElement.Canvas;
-        protected static Engine Engine => Engine.Instance;
-        private bool _initialized;
+    protected internal UIElement UIElement { get; set; }
+    protected Canvas Canvas => UIElement.Canvas;
+    protected static Engine Engine => Engine.Instance;
+    private bool _initialized;
 
-        private AnchorPosition _anchorPosition;
-        private Vector2 _offset;
+    private AnchorPosition _anchorPosition;
+    private Vector2 _offset;
         
-        public AnchorPosition AnchorPosition
+    public AnchorPosition AnchorPosition
+    {
+        get => _initialized ? UIElement.AnchorPosition : _anchorPosition;
+        set
         {
-            get
+            if (_initialized)
             {
-                if (_initialized)
-                {
-                    return UIElement.AnchorPosition;
-                }
-
-                return _anchorPosition;
+                UIElement.AnchorPosition = value;
             }
-            set
+            else
             {
-                if (_initialized)
-                {
-                    UIElement.AnchorPosition = value;
-                }
-                else
-                {
-                    _anchorPosition = value;
-                }
+                _anchorPosition = value;
             }
         }
+    }
 
-        public Vector2 Offset
+    public Vector2 Offset
+    {
+        get => _initialized ? UIElement.Offset : _offset;
+        set
         {
-            get
+            if (_initialized)
             {
-                if (_initialized)
-                {
-                    return UIElement.Offset;
-                }
-
-                return _offset;
+                UIElement.Offset = value;
             }
-            set
+            else
             {
-                if (_initialized)
-                {
-                    UIElement.Offset = value;
-                }
-                else
-                {
-                    _offset = value;
-                }
+                _offset = value;
             }
         }
+    }
 
-        public virtual bool Enabled
-        {
-            get => UIElement.Enabled;
-            set => UIElement.Enabled = value;
-        }
+    public virtual bool Enabled
+    {
+        get => UIElement.Enabled;
+        set => UIElement.Enabled = value;
+    }
 
-        public virtual int UpdateOrder => UIElement.UpdateOrder;
-        public event EventHandler<EventArgs> EnabledChanged
-        {
-            add => UIElement.EnabledChanged += value;
-            remove => UIElement.EnabledChanged -= value;
-        }
-        public event EventHandler<EventArgs> UpdateOrderChanged
-        {
-            add => UIElement.UpdateOrderChanged += value;
-            remove => UIElement.UpdateOrderChanged -= value;
-        }
+    public virtual int UpdateOrder => UIElement.UpdateOrder;
+    public event EventHandler<EventArgs> EnabledChanged
+    {
+        add => UIElement.EnabledChanged += value;
+        remove => UIElement.EnabledChanged -= value;
+    }
+    public event EventHandler<EventArgs> UpdateOrderChanged
+    {
+        add => UIElement.UpdateOrderChanged += value;
+        remove => UIElement.UpdateOrderChanged -= value;
+    }
 
-        public virtual void Update(GameTime gameTime) { }
+    public virtual void Update(GameTime gameTime) { }
 
-        public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
+    public abstract void Draw(GameTime gameTime, SpriteBatch spriteBatch);
 
-        internal virtual void Initialise()
-        {
-            _initialized = true;
-            AnchorPosition = _anchorPosition;
-            Offset = _offset;
-        }
+    internal virtual void Initialise()
+    {
+        _initialized = true;
+        AnchorPosition = _anchorPosition;
+        Offset = _offset;
     }
 }

@@ -38,22 +38,20 @@ public class VirtualJoystick : VirtualInput
         Value = Vector2.Zero;
         foreach (var node in Nodes)
         {
-            Vector2 value = node.Value;
-            if (value != Vector2.Zero)
+            var value = node.Value;
+            if (value == Vector2.Zero) continue;
+            if (Normalized)
             {
-                if (Normalized)
-                {
-                    if (SnapSlices.HasValue)
-                        value = value.SnappedNormal(SnapSlices.Value);
-                    else
-                        value.Normalize();
-                }
-                else if (SnapSlices.HasValue)
-                    value = value.Snapped(SnapSlices.Value);
-
-                Value = value;
-                break;
+                if (SnapSlices.HasValue)
+                    value = value.SnappedNormal(SnapSlices.Value);
+                else
+                    value.Normalize();
             }
+            else if (SnapSlices.HasValue)
+                value = value.Snapped(SnapSlices.Value);
+
+            Value = value;
+            break;
         }
     }
 
@@ -108,7 +106,7 @@ public class VirtualJoystick : VirtualInput
         {
             get
             {
-                Vector2 value = Vector2.Zero;
+                var value = Vector2.Zero;
 
                 if (MInput.GamePads[GamepadIndex].DPadRightCheck)
                     value.X = 1f;
