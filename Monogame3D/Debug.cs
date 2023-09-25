@@ -1,157 +1,100 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
-using Monogame3D.Exceptions;
 
-namespace Monogame3D
+namespace Monogame3D;
+
+public static class Debug
 {
-    public sealed class Debug : IDisposable, IAsyncDisposable
+    public enum LogLevel
     {
-        private const string LogPath = "RunLog.log";
-        private const string PreviousLogPath = "RunLog_previous.log";
-        private const string ApplicationName = "Village Defender";
+        Log = 1,
+        Info = 2,
+        Warn = 3,
+        Error = 4
+    }
 
-        private static Debug _instance;
+    private const string LogPath = "RunLog.log";
+    private const string PreviousLogPath = "RunLog_previous.log";
+    private const string ApplicationName = "Village Defender";
 
-        private readonly StreamWriter _writer;
+    private static readonly StreamWriter Writer;
+    private static readonly string _appDataPath;
 
-        internal Debug()
-        {
-            if (_instance != null)
-            {
-                Debug.LogError(new DuplicateSingletonException());
-                return;
-            }
+    static Debug()
+    {
+        _appDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/{ApplicationName}/";
 
-            var appDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/{ApplicationName}/";
-
-            if (!Directory.Exists(appDataPath)) Directory.CreateDirectory(appDataPath);
+        if (!Directory.Exists(_appDataPath)) Directory.CreateDirectory(_appDataPath);
             
-            AttemptMovePreviousFile();
+        AttemptMovePreviousFile();
 
-            // var logFile = File.Create(appDataPath + LogPath);
-            _writer = new StreamWriter(appDataPath + LogPath, false)
-            {
-                NewLine = "\n",
-                AutoFlush = true
-            };
-
-            _writer.WriteLine($"{ApplicationName}: Application opened at {DateTime.Now}\n");
-        }
-
-        private void AttemptMovePreviousFile()
+        // var logFile = File.Create(appDataPath + LogPath);
+        Writer = new StreamWriter(_appDataPath + LogPath, false)
         {
-            var appDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/{ApplicationName}/";
+            NewLine = "\n",
+            AutoFlush = true
+        };
 
-            /*if (File.Exists(appDataPath + PreviousLogPath)) 
-                File.Delete(appDataPath + PreviousLogPath);*/
+        Log($"{ApplicationName}: Application opened at {DateTime.Now}", 0);
+    }
 
-            if (File.Exists(appDataPath + LogPath))
-                File.Move(appDataPath + LogPath, appDataPath + PreviousLogPath, true);
-        }
-
-        ~Debug()
-        {
-            Dispose(false);
-        }
-
-        public static void Initialise() => _instance = new Debug();
-        private static void CheckInstance() => _instance ??= new Debug();
+    private static void AttemptMovePreviousFile()
+    {
+        if (File.Exists(_appDataPath + LogPath))
+            File.Move(_appDataPath + LogPath, _appDataPath + PreviousLogPath, true);
+    }
 
 #nullable enable
-        private static string GetPrefix()
-        {
-            var stackTrace = new StackTrace(2);
-            return $"{DateTime.Now}:{stackTrace.GetFrame(0)?.GetMethod()?.DeclaringType}";
-        }
+    private static string GetPrefix()
+    {
+        var stackTrace = new StackTrace(2);
+        return $"{DateTime.Now}:{stackTrace.GetFrame(0)?.GetMethod()?.DeclaringType}";
+    }
         
-        public static void Log(object? message, int logLevel)
-        {
-            CheckInstance();
-
-            var toLog = $"[{GetPrefix()}/INFO]: {message}\n";
+    public static void Log(object? message, LogLevel logLevel)
+    {
+        var toLog = logLevel == 0 ? $"{message}\n" : $"[{GetPrefix()}/{logLevel}]: {message}\n";
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(toLog);
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.WriteLine(toLog);
 #endif
 
-            _instance._writer.WriteLine(toLog);
-        }
+        Writer.WriteLine(toLog);
+    }
 
-        public static void Log(object message)
-        {
-            CheckInstance();
-
-            var toLog = $"[{GetPrefix()}/INFO]: {message}\n";
+    public static void Log(object? message)
+    {
+        var toLog = $"[{GetPrefix()}/INFO]: {message}\n";
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(toLog);
+        Console.ForegroundColor = ConsoleColor.White;
+        Console.WriteLine(toLog);
 #endif
 
-            _instance._writer.WriteLine(toLog);
-        }
+        Writer.WriteLine(toLog);
+    }
 
-        public static void LogWarning(object message)
-        {
-            CheckInstance();
-
-            var toLog = $"[{GetPrefix()}/WARN]: {message}\n";
+    public static void LogWarning(object? message)
+    {
+        var toLog = $"[{GetPrefix()}/WARN]: {message}\n";
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine(toLog);
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine(toLog);
 #endif
 
-            _instance._writer.WriteLine(toLog);
-        }
+        Writer.WriteLine(toLog);
+    }
 
-        public static void LogError(object message)
-        {
-            CheckInstance();
+    public static void LogError(object? message)
+    {
+        var stackTrace = new StackTrace(1);
 
-            var stackTrace = new StackTrace(1);
-
-            var toLog = $"[{GetPrefix()}/ERROR]: {message}\n{stackTrace}";
+        var toLog = $"[{GetPrefix()}/ERROR]: {message}\n{stackTrace}";
 #if DEBUG
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Error.WriteLine(toLog);
+        Console.ForegroundColor = ConsoleColor.DarkRed;
+        Console.Error.WriteLine(toLog);
 #endif
 
-            _instance._writer.WriteLine(toLog);
-        }
-#nullable restore
-
-        private void ReleaseUnmanagedResources()
-        {
-            // TODO release unmanaged resources here
-        }
-
-        private void Dispose(bool disposing)
-        {
-            ReleaseUnmanagedResources();
-            if (disposing)
-            {
-                _writer?.Dispose();
-            }
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        private async ValueTask DisposeAsyncCore()
-        {
-            ReleaseUnmanagedResources();
-
-            if (_writer != null) await _writer.DisposeAsync();
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await DisposeAsyncCore();
-            GC.SuppressFinalize(this);
-        }
+        Writer.WriteLine(toLog);
     }
 }

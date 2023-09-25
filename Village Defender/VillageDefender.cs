@@ -1,65 +1,62 @@
-﻿using Monogame3D;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Monogame3D;
 
-namespace VillageDefender
+namespace VillageDefender;
+
+internal class VillageDefender : Game
 {
-    internal class VillageDefender : Game
+    private GraphicsDeviceManager _graphics;
+    private SpriteBatch _spriteBatch;
+
+    public VillageDefender()
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
+        _graphics = new GraphicsDeviceManager(this);
+        Content.RootDirectory = "Content";
+        IsMouseVisible = true;
+    }
 
-        public VillageDefender()
-        {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
-        }
+    protected override void Initialize()
+    {
+        // TODO: Add your initialization logic here
 
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
+        Debug.Log("this is a log");
+        Debug.LogWarning("this is a warn");
+        Debug.LogError("this is an error");
 
-            Debug.Initialise();
+        base.Initialize();
+    }
 
-            Debug.Log("this is a log");
-            Debug.LogWarning("this is a warn");
-            Debug.LogError("this is an error");
+    protected override void LoadContent()
+    {
+        _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            base.Initialize();
-        }
+        Services.AddService(typeof(SpriteBatch), _spriteBatch);
 
-        protected override void LoadContent()
-        {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
+        // TODO: use this.Content to load your game content here
+    }
 
-            Services.AddService(typeof(SpriteBatch), _spriteBatch);
+    protected override void Update(GameTime gameTime)
+    {
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            Exit();
 
-            // TODO: use this.Content to load your game content here
-        }
+        // TODO: Add your update logic here
 
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
+        base.Update(gameTime);
+    }
 
-            // TODO: Add your update logic here
+    protected override void Draw(GameTime gameTime)
+    {
+        GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            base.Update(gameTime);
-        }
+        _spriteBatch.Begin();
+        //_spriteBatch.Draw(texture, position, Color.White);
+        _spriteBatch.End();
 
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+        // TODO: Add your drawing code here
 
-            _spriteBatch.Begin();
-            //_spriteBatch.Draw(texture, position, Color.White);
-            _spriteBatch.End();
-
-            // TODO: Add your drawing code here
-
-            base.Draw(gameTime);
-        }
+        base.Draw(gameTime);
     }
 }

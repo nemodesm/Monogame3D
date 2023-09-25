@@ -4,59 +4,58 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Monogame3D.Exceptions;
 
-namespace Monogame3D._3DObjects
+namespace Monogame3D._3DObjects;
+
+public class MeshRenderer : LocalizedObject, ICameraDrawable
 {
-    public class MeshRenderer : LocalizedObject, ICameraDrawable
+    private readonly Model _model;
+
+    public MeshRenderer([NotNull] Model model)
     {
-        private readonly Model _model;
+        _model = model;
+    }
 
-        public MeshRenderer([NotNull] Engine game, [NotNull] Model model) : base(game)
+    public MeshRenderer(string modelName)
+    {
+        try
         {
-            this._model = model;
+            _model = Engine.Content.Load<Model>(modelName);
         }
-
-        public MeshRenderer([NotNull] Engine game, string modelName) : base(game)
+        catch (Exception e)
         {
-            try
-            {
-                this._model = game.Content.Load<Model>(modelName);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError(e);
-                return;
-            }
-            
-            game.Camera.RegisterCameraDrawable(this);
-            
-            if (this._model is null)
-                Debug.LogError(new InvalidModelException());
+            Debug.LogError(e);
+            return;
         }
-
-        ~MeshRenderer()
-        {
-            // game.Content.UnloadAsset("MonoCube");
             
-            game.Camera.DeregisterCameraDrawable(this);
-        }
+        Engine.Camera.RegisterCameraDrawable(this);
+            
+        if (_model is null)
+            Debug.LogError(new InvalidModelException());
+    }
 
-        void ICameraDrawable.Draw(GameTime gameTime, Camera camera)
+    ~MeshRenderer()
+    {
+        // game.Content.UnloadAsset("MonoCube");
+            
+        Engine.Camera.DeregisterCameraDrawable(this);
+    }
+
+    void ICameraDrawable.Draw(GameTime gameTime, Camera camera)
+    {
+        foreach (var mesh in _model.Meshes)
         {
-            foreach (var mesh in _model.Meshes)
+            // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
+            foreach (var t in mesh.Effects)
             {
-                // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
-                foreach (var t in mesh.Effects)
-                {
-                    var effect = (BasicEffect)t;
+                var effect = (BasicEffect)t;
 
-                    effect.AmbientLightColor = new Vector3(1f, 0, 0);
-                    effect.View = camera.ViewMatrix;
-                    effect.World = camera.WorldMatrix;
-                    effect.Projection = camera.ProjectionMatrix;
-                }
-
-                mesh.Draw();
+                effect.AmbientLightColor = new Vector3(1f, 0, 0);
+                effect.View = camera.ViewMatrix;
+                effect.World = camera.WorldMatrix;
+                effect.Projection = camera.ProjectionMatrix;
             }
+
+            mesh.Draw();
         }
     }
 }

@@ -1,43 +1,52 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Monogame3D;
 using Monogame3D._3DObjects;
 using Monogame3D.UI;
 using Monogame3D.UI.Components;
 
-namespace VillageDefender
+namespace VillageDefender;
+
+internal class Game3D : Engine
 {
-    internal class Game3D : Monogame3D.Engine
+    protected override void Initialize()
     {
-        public Game3D() : base()
-        {
-            Content.RootDirectory = "Content";
-        }
-
-        protected override void Initialize()
-        {
-            // base.Initialise should exceptionally be called before any other methods in this specific instance
-            Canvas.AddElement(new UIElement(new Button(() => Debug.Log("Button Clicked")), new Image("defaultTexture", anchorPosition: AnchorPosition.Center)));
+        Canvas.AddElement(new UIElement(
+            new Button(() => Debug.Log("Button Clicked")),
+            new Image("defaultTexture", anchorPosition: AnchorPosition.Center)));
+        Canvas.AddElement(new UIElement(
+            new Button(() => Debug.Log("Button Clicked")),
+            new Image("defaultTexture", anchorPosition: AnchorPosition.BottomLeft, new Vector2(30))));
             
-            base.Initialize();
-        }
+        base.Initialize();
+    }
 
-        protected override void LoadContent()
-        {
-            var renderer = new MeshRenderer(this, "MonoCube");
+    protected override void LoadContent()
+    {
+        var renderer = new MeshRenderer("MonoCube");
             
-            ((LocalizedObject)renderer).Initialize();
+        renderer.Initialize();
 
-            base.LoadContent();
-        }
+        base.LoadContent();
+    }
 
-        protected override void UnloadContent()
+    private bool removed;
+    protected override void Update(GameTime gameTime)
+    {
+        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            Exit();
+            
+        if (!removed && gameTime.TotalGameTime.Seconds > 1)
         {
-            base.UnloadContent();
+            removed = true;
+            Canvas.RemoveElement(Canvas.GetChild(0));
+            Debug.Log("Removed UI Element");
         }
-
-        protected override void Update(GameTime gameTime)
-        {
-            base.Update(gameTime);
-        }
+            
+        // Really aggressive garbage collection to make sure no assets are unintentionally unloaded in destructors
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            
+        base.Update(gameTime);
     }
 }
