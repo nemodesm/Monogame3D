@@ -1,19 +1,18 @@
 ﻿using System;
 
-namespace Monogame3D.Exceptions
+namespace Monogame3D.Exceptions;
+
+public class InvalidModelException : Exception
 {
-    public class InvalidModelException : Exception
+    public InvalidModelException()
     {
-        public InvalidModelException()
-        {
-        }
+    }
 
-        public InvalidModelException(string message) : base(message)
-        {
-        }
+    public InvalidModelException(string message) : base(message)
+    {
+    }
 
-        public InvalidModelException(string message, Exception inner) : base(message, inner)
-        {
-        }
+    public InvalidModelException(string message, Exception inner) : base(message, inner)
+    {
     }
 }

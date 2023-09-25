@@ -1,7 +1,6 @@
-﻿namespace Monogame3D.InputSystem
+﻿namespace Monogame3D.InputSystem;
+
+internal interface ISubmitHandler
 {
-    internal interface ISubmitHandler
-    {
-        public void Submit();
-    }
+    public void Submit();
 }

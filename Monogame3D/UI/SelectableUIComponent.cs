@@ -4,18 +4,18 @@ using Monogame3D.InputSystem;
 
 namespace Monogame3D.UI;
 
-// ReSharper disable once InconsistentNaming
-
 /// <summary>
 /// A UI component that con be selected via button navigation or by clicking it
 /// </summary>
-public abstract class SelectableUIComponent : UIComponent, ISelectable, ISubmitHandler
+public abstract class SelectableUIComponent : UIComponent, IUISelectable, ISubmitHandler
 {
     /// <summary>
     /// Whether or not the component is selectable
     /// </summary>
     public virtual bool IsSelectable => Enabled;
-    
+
+    public abstract NavigationData NavigationData { get; set; }
+
     // TODO: make abstract
     /// <summary>
     /// Draw the component renderers

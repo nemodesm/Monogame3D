@@ -12,16 +12,11 @@ namespace Monogame3D._3DObjects
         public Matrix ViewMatrix;
         public Matrix WorldMatrix;
         public Matrix ProjectionMatrix;
-        private Color _clearColor = Color.CornflowerBlue;
 
         public int DrawOrder => 0;
         public bool Visible => true;
 
-        public Color ClearColor
-        {
-            get => _clearColor;
-            set => _clearColor = value;
-        }
+        public Color ClearColor { get; set; } = Color.CornflowerBlue;
 
         public event EventHandler<EventArgs> DrawOrderChanged;
         public event EventHandler<EventArgs> VisibleChanged;
@@ -32,12 +27,12 @@ namespace Monogame3D._3DObjects
         }
         public Camera([NotNull] List<ICameraDrawable> drawnObjects) : this()
         {
-            this._drawnObjects = drawnObjects;
+            _drawnObjects = drawnObjects;
         }
 
         public void Draw(GameTime gameTime)
         {
-            Engine.GraphicsDevice.Clear(_clearColor);
+            Engine.GraphicsDevice.Clear(ClearColor);
 
             foreach (var drawable in _drawnObjects)
             {
