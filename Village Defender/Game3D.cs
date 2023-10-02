@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Monogame3D;
-using Monogame3D._3DObjects;
-using Monogame3D.UI;
-using Monogame3D.UI.Components;
+using MonoGame3D;
+using MonoGame3D._3DObjects;
+using MonoGame3D.UI;
+using MonoGame3D.UI.Components;
 
 namespace VillageDefender;
 
@@ -14,10 +14,10 @@ internal class Game3D : Engine
     {
         Canvas.AddElement(new UIElement(
             new Button(() => Debug.Log("Button Clicked")),
-            new Image("defaultTexture", anchorPosition: AnchorPosition.Center)));
+            new Image(anchorPosition: AnchorPosition.Center)));
         Canvas.AddElement(new UIElement(
             new Button(() => Debug.Log("Button Clicked")),
-            new Image("defaultTexture", anchorPosition: AnchorPosition.BottomLeft, new Vector2(30))));
+            new Image(anchorPosition: AnchorPosition.BottomLeft, new Vector2(30))));
             
         base.Initialize();
     }

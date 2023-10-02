@@ -1,4 +1,6 @@
-﻿namespace Monogame3D.InputSystem;
+﻿using System;
+
+namespace MonoGame3D.InputSystem;
 
 /// <summary>
 /// Represents a virtual button, axis or joystick whose state is determined by the state of its VirtualInputNodes
@@ -10,12 +12,26 @@ public abstract class VirtualInput
 
     public VirtualInput()
     {
-        MInput.VirtualInputs.Add(this);
+        try
+        {
+            MInput.VirtualInputs!.Add(this);
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.LogError(e);
+        }
     }
 
     public void Deregister()
     {
-        MInput.VirtualInputs.Remove(this);
+        try
+        {
+            MInput.VirtualInputs!.Remove(this);
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.LogError(e);
+        }
     }
 
     public abstract void Update();

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Monogame3D.UI;
+namespace MonoGame3D.UI;
 
 public interface ICanvasDrawable
 {

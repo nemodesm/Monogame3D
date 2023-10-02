@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace Monogame3D;
+namespace MonoGame3D;
 
 internal static class QuaternionExtension
 {

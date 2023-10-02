@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework.Input;
-using Monogame3D.MathUtils;
+using MonoGame3D.MathUtils;
 
-namespace Monogame3D.InputSystem;
+namespace MonoGame3D.InputSystem;
 
 /// <summary>
 /// A virtual input represented as a float between -1 and 1

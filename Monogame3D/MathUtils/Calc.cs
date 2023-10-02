@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 
-namespace Monogame3D.MathUtils;
+namespace MonoGame3D.MathUtils;
 
 public static class Calc
 {

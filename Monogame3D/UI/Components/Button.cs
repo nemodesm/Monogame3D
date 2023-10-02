@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
-using Monogame3D.InputSystem;
+using MonoGame3D.InputSystem;
 
-namespace Monogame3D.UI.Components;
+namespace MonoGame3D.UI.Components;
 
 public class Button : SelectableUIComponent
 {
@@ -12,7 +12,7 @@ public class Button : SelectableUIComponent
     /// </summary>
     public class ButtonEvent
     {
-        private Action _action;
+        private Action? _action;
 
         public ButtonEvent() { }
         internal ButtonEvent(Action action)
@@ -52,7 +52,7 @@ public class Button : SelectableUIComponent
 
     private Vector2 _size;
 
-    public Button(Action selectAction, Vector2 size = default, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default)
+    public Button(Action? selectAction, Vector2 size = default, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default)
     {
         OnSubmit = new ButtonEvent(selectAction);
         _size = size;

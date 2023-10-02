@@ -1,31 +1,40 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 
-namespace Monogame3D;
+namespace MonoGame3D;
 
-public class ContentManager
+public static class ContentManager
 {
+    /// <summary>
+    /// Reference to the game's content manager
+    /// </summary>
     private static Microsoft.Xna.Framework.Content.ContentManager Content => Engine.Instance.Content;
 
-    private static Dictionary<string, (object asset, HashSet<object> dependants)> _dependencies = new();
+    /// <summary>
+    /// Stores all loaded assets and their dependants, where the key is the path to the asset, and the value is a tuple
+    /// (asset (as object), dependants (in a HashSet))
+    /// </summary>
+    private static readonly Dictionary<string, (object asset, HashSet<object> dependants)> Dependencies = new();
     
     /// <summary>
     /// Requests a specific MCGB asset to be loaded and marks <paramref name="object"/> as a dependency of that object
     /// </summary>
+    /// <exception cref="ContentLoadException">Thrown if the asset cannot be loaded</exception>
     /// <param name="assetName">The path to the asset</param>
     /// <param name="object">The object requesting the asset</param>
     /// <typeparam name="T">The type of asset that you want to load</typeparam>
-    /// <returns></returns>
+    /// <returns>The asset that is loaded</returns>
     public static T RequestContent<T>(string assetName, object @object)
     {
-        if (!_dependencies.ContainsKey(assetName))
+        if (!Dependencies.TryGetValue(assetName, out var value))
         {
             var asset = Content.Load<T>(assetName);
-            _dependencies.Add(assetName, (asset, new HashSet<object> { @object }));
+            value = (asset, new HashSet<object> { @object })!;
+            Dependencies.Add(assetName, value);
             return asset;
         }
 
-        var t = _dependencies[assetName];
+        var t = value;
         t.dependants.Add(@object);
         return (T)t.asset;
     }
@@ -38,7 +47,7 @@ public class ContentManager
     /// <param name="object">The object releasing the asset</param>
     public static void UnloadAsset(string assetName, object @object)
     {
-        if (!_dependencies.TryGetValue(assetName, out var value))
+        if (!Dependencies.TryGetValue(assetName, out var value))
         {
             Debug.LogError(new ContentLoadException());
             return;

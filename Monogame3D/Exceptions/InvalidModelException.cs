@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Monogame3D.Exceptions;
+namespace MonoGame3D.Exceptions;
 
 public class InvalidModelException : Exception
 {

@@ -3,25 +3,36 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Monogame3D.UI;
+namespace MonoGame3D.UI;
 
 public class UIElement : ICanvasDrawable, IUpdateable
 {
-    public string name;
-    protected readonly List<UIElement> _childUIElements = new();
+    /// <summary>
+    /// The name of this UI element
+    /// </summary>
+    /// <remarks>
+    /// No checks are made to ensure that this name is unique in the UI tree
+    /// </remarks>
+    public string Name;
+    
+    /// <summary>
+    /// The list of all child UI elements
+    /// </summary>
+    protected readonly List<UIElement> ChildUIElements = new();
+    
     /// <summary>
     /// The list of components that are attached to this UI element
     /// </summary>
-    protected readonly HashSet<UIComponent> _components = new();
+    protected readonly HashSet<UIComponent> Components = new();
 
-    private UIElement _parent;
-    private bool _enabled;
-    protected internal Canvas Canvas => _parent is null ? this as Canvas : _parent.Canvas;
+    private UIElement? _parent;
+    private bool _enabled = true;
+    protected internal Canvas Canvas => (_parent is null ? this as Canvas : _parent.Canvas)!;
     protected static Engine Engine => Engine.Instance;
 
     public virtual AnchorPosition AnchorPosition { get; set; }
     public virtual Vector2 Offset { get; set; }
-    public int ChildCount => _childUIElements.Count;
+    public int ChildCount => ChildUIElements.Count;
 
     public bool Enabled
     {
@@ -40,12 +51,12 @@ public class UIElement : ICanvasDrawable, IUpdateable
     public UIElement(params UIComponent[] components) : this("New UI Element", components) { }
     public UIElement(string name, params UIComponent[] components)
     {
-        this.name = name;
+        this.Name = name;
             
         foreach (var component in components)
         {
             component.UIElement = this;
-            _components.Add(component);
+            Components.Add(component);
         }
     }
         
@@ -65,7 +76,7 @@ public class UIElement : ICanvasDrawable, IUpdateable
             Debug.LogError(new InvalidOperationException());
         }
         component.UIElement = this;
-        _components.Add(component);
+        Components.Add(component);
             
         component.Initialise();
     }
@@ -77,7 +88,7 @@ public class UIElement : ICanvasDrawable, IUpdateable
     public void AddElement(UIElement element)
     {
         element._parent = this;
-        _childUIElements.Add(element);
+        ChildUIElements.Add(element);
     }
 
     /// <summary>
@@ -93,38 +104,66 @@ public class UIElement : ICanvasDrawable, IUpdateable
                 "begin with"));
         }
         element._parent = null;
-        _childUIElements.Remove(element);
+        ChildUIElements.Remove(element);
     }
-        
-    public UIElement GetChild(int i)
+    
+    public UIElement? GetChild(int i)
     {
-        if (i < _childUIElements.Count) return _childUIElements[i];
-        Debug.LogError(
-            $"Could not get child at index{i} from UI element with only {_childUIElements.Count} children");
+        if (i < ChildUIElements.Count)
+        {
+            return ChildUIElements[i];
+        }
+        
+        return null;
+    }
+    
+    /// <summary>
+    /// Returns the first child that has the given name
+    /// </summary>
+    /// <param name="name">The name to look for</param>
+    /// <returns>The first child that matches the given name</returns>
+    public UIElement? GetChildByName(string name)
+    {
+        foreach (var child in ChildUIElements)
+        {
+            if (child.Name == name)
+            {
+                return child;
+            }
+        }
+
         return null;
     }
 
     public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
-        foreach (var component in _components)
+        if (!this.Enabled)
+        {
+            return;
+        }
+        
+        foreach (var component in Components)
         {
             component.Draw(gameTime, spriteBatch);
         }
 
-        foreach (var uiElement in _childUIElements)
+        foreach (var uiElement in ChildUIElements)
         {
-            uiElement.Draw(gameTime, spriteBatch);
+            if (uiElement.Enabled)
+            {
+                uiElement.Draw(gameTime, spriteBatch);
+            }
         }
     }
 
     public void Initialize()
     {
-        foreach (var element in _childUIElements)
+        foreach (var element in ChildUIElements)
         {
             element.Initialize();
         }
 
-        foreach (var component in _components)
+        foreach (var component in Components)
         {
             component.Initialise();
         }
@@ -132,12 +171,12 @@ public class UIElement : ICanvasDrawable, IUpdateable
 
     public void Update(GameTime gameTime)
     {
-        foreach (var element in _childUIElements)
+        foreach (var element in ChildUIElements)
         {
             element.Update(gameTime);
         }
 
-        foreach (var component in _components)
+        foreach (var component in Components)
         {
             component.Update(gameTime);
         }
@@ -145,7 +184,7 @@ public class UIElement : ICanvasDrawable, IUpdateable
 
     public T GetComponent<T>() where T : UIComponent
     {
-        foreach (var component in _components)
+        foreach (var component in Components)
         {
             if (component is T t)
             {

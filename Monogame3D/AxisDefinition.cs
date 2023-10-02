@@ -1,6 +1,6 @@
 using Microsoft.Xna.Framework.Input;
 
-namespace Monogame3D;
+namespace MonoGame3D;
 
 public struct AxisDefinition
 {

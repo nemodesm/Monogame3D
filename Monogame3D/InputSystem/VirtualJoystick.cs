@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Monogame3D.MathUtils;
+using MonoGame3D.MathUtils;
 
-namespace Monogame3D.InputSystem;
+namespace MonoGame3D.InputSystem;
 
 /// <summary>
 /// A virtual input that is represented as a Vector2, with both X and Y as values between -1 and 1

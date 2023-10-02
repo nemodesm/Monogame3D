@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Monogame3D.UI;
+namespace MonoGame3D.UI;
 
 /// <summary>
 /// A component that can be attached to a UI Element and will receive calls to Draw and Update from the canvas

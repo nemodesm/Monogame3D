@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Monogame3D._3DObjects;
+namespace MonoGame3D._3DObjects;
 
 public class LocalizedObject : IGameComponent
 {

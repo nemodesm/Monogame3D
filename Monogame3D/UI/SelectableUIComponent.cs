@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Monogame3D.InputSystem;
+using MonoGame3D.InputSystem;
 
-namespace Monogame3D.UI;
+namespace MonoGame3D.UI;
 
 /// <summary>
 /// A UI component that con be selected via button navigation or by clicking it
@@ -27,7 +27,7 @@ public abstract class SelectableUIComponent : UIComponent, IUISelectable, ISubmi
     /// <summary>
     /// Called when the user deselects this component.
     /// The two primary causes for this to be called is if the user selects another component or if this component is
-    /// clicked (see <see cref="Monogame3D.UI.SelectableUIComponent.Submit()"/> for when this object is clicked)
+    /// clicked (see <see cref="SelectableUIComponent.Submit()"/> for when this object is clicked)
     /// </summary>
     public virtual void Deselect() { }
 

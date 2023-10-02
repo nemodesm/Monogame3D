@@ -21,8 +21,4 @@
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
   </ItemGroup>
-  
-  <ItemGroup>
-    <Folder Include="Mathematics\" />
-  </ItemGroup>
 </Project>
