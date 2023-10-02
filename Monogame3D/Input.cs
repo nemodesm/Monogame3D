@@ -1,7 +1,8 @@
-﻿using Microsoft.Xna.Framework.Input;
-using Monogame3D.InputSystem;
+﻿using System;
+using Microsoft.Xna.Framework.Input;
+using MonoGame3D.InputSystem;
 
-namespace Monogame3D;
+namespace MonoGame3D;
 
 public static class Input
 {
@@ -9,17 +10,41 @@ public static class Input
         
     public static bool GetKeyDown(Keys key)
     {
-        return MInput.Keyboard.Pressed(key);
+        try
+        {
+            return MInput.Keyboard!.Pressed(key);
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.LogError(e);
+            return false;
+        }
     }
 
     public static bool GetKey(Keys key)
     {
-        return MInput.Keyboard.Check(key);
+        try
+        {
+            return MInput.Keyboard!.Check(key);
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.LogError(e);
+            return false;
+        }
     }
 
     public static bool GetKeyUp(Keys key)
     {
-        return MInput.Keyboard.Released(key);
+        try
+        {
+            return MInput.Keyboard!.Released(key);
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.LogError(e);
+            return false;
+        }
     }
 
     public static float GetAxis(AxisDefinition axis)

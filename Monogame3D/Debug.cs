@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 
-namespace Monogame3D;
+namespace MonoGame3D;
 
 public static class Debug
 {

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Monogame3D\Monogame3D.csproj" />
+    <ProjectReference Include="..\Monogame3D\MonoGame3D.csproj" />
   </ItemGroup>
 
 </Project>

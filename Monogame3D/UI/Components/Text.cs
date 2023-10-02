@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Monogame3D.UI.Components;
+namespace MonoGame3D.UI.Components;
 
 public class Text : UIComponent
 {

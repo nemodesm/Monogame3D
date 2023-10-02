@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace Monogame3D.Exceptions;
+namespace MonoGame3D.Exceptions;
 
 [Serializable]
 public class DuplicateSingletonException : Exception

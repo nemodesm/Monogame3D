@@ -3,29 +3,49 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Monogame3D.UI.Components;
+namespace MonoGame3D.UI.Components;
 
 public class Image : UIComponent
 {
     /// <summary>
     /// The texture that this image displays
     /// </summary>
-    private Texture2D image;
+    private Texture2D _image;
+    
     /// <summary>
     /// The path to the texture that this image displays
     /// </summary>
-    private readonly string imagePath;
+    private string _imagePath;
+    
     /// <summary>
     /// Tint that will be applied to the game
     /// </summary>
     public Color ColorTint = Color.White;
 
+    /// <summary>
+    /// The path to the texture that this image displays
+    /// </summary>
+    public string ImagePath
+    {
+        get => _imagePath;
+        set
+        {
+            ContentManager.UnloadAsset(_imagePath, this);
+            _imagePath = value;
+            _image = ContentManager.RequestContent<Texture2D>(_imagePath, this);
+        }
+    }
+
+    public Image(AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default) : this(
+        "Engine\\defaultUIImage", anchorPosition, offset)
+    {
+    }
     public Image(string imagePath, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default)
     {
-        this.imagePath = imagePath;
+        this._imagePath = imagePath;
         if (anchorPosition == AnchorPosition.Absolute)
         {
-            Debug.LogWarning($"Drawing {this} with absolute positioning");
+            Debug.LogWarning($"Drawing {this} with absolute positioning, which is not recommended");
         }
         AnchorPosition = anchorPosition;
         Offset = offset;
@@ -33,16 +53,16 @@ public class Image : UIComponent
 
     ~Image()
     {
-        ContentManager.UnloadAsset(imagePath, this);
+        ContentManager.UnloadAsset(_imagePath, this);
     }
-        
+
     public override void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
         try
         {
             if (AnchorPosition == AnchorPosition.Absolute)
             {
-                spriteBatch.Draw(image, Offset, ColorTint);
+                spriteBatch.Draw(_image, Offset, ColorTint);
                 return;
             }
 
@@ -54,10 +74,10 @@ public class Image : UIComponent
                 AnchorPosition.TopLeft or AnchorPosition.CenterLeft or AnchorPosition.BottomLeft => 0,
                 // ReSharper disable PossibleLossOfFraction
                 AnchorPosition.TopCenter or AnchorPosition.Center or AnchorPosition.BottomCenter => screenX / 2 -
-                    image.Width / 2,
+                    _image.Width / 2,
                 // ReSharper restore PossibleLossOfFraction
                 AnchorPosition.TopRight or AnchorPosition.CenterRight or AnchorPosition.BottomRight => screenX -
-                    image.Width,
+                    _image.Width,
                 _ => position.Y
             };
             position.Y = AnchorPosition switch
@@ -65,18 +85,23 @@ public class Image : UIComponent
                 AnchorPosition.TopLeft or AnchorPosition.TopCenter or AnchorPosition.TopRight => 0,
                 // ReSharper disable PossibleLossOfFraction
                 AnchorPosition.CenterLeft or AnchorPosition.Center or AnchorPosition.CenterRight => screenY / 2 -
-                    image.Height / 2,
+                    _image.Height / 2,
                 // ReSharper restore PossibleLossOfFraction
                 AnchorPosition.BottomLeft or AnchorPosition.BottomCenter or AnchorPosition.BottomRight => screenY -
-                    image.Height,
+                    _image.Height,
                 _ => position.Y
             };
 
-            spriteBatch.Draw(image, position + Offset, ColorTint);
+            spriteBatch.Draw(_image, position + Offset, ColorTint);
         }
         catch (ArgumentNullException e)
         {
             Debug.LogError(e);
+        }
+        catch (NullReferenceException e)
+        {
+            Debug.LogError(new NullReferenceException("Image is null, disabling component", e));
+            this.Enabled = false;
         }
     }
 
@@ -84,7 +109,7 @@ public class Image : UIComponent
     {
         try
         {
-            image = ContentManager.RequestContent<Texture2D>(imagePath, this);
+            _image = ContentManager.RequestContent<Texture2D>(_imagePath, this);
         }
         catch (ContentLoadException e)
         {

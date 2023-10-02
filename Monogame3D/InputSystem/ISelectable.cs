@@ -1,4 +1,4 @@
-﻿namespace Monogame3D.InputSystem;
+﻿namespace MonoGame3D.InputSystem;
 
 public interface ISelectable
 {

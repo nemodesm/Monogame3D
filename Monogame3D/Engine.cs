@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Monogame3D._3DObjects;
-using Monogame3D.InputSystem;
-using Monogame3D.UI;
+using MonoGame3D._3DObjects;
+using MonoGame3D.InputSystem;
+using MonoGame3D.UI;
 
-namespace Monogame3D;
+namespace MonoGame3D;
 
 public abstract class Engine : Game
 {

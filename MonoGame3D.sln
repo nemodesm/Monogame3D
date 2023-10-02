@@ -5,7 +5,7 @@ VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VillageDefender", "Village Defender\VillageDefender.csproj", "{DC0D37DA-90D5-431D-A30D-822F9393C754}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Monogame3D", "Monogame3D\Monogame3D.csproj", "{6F4186CB-040C-4CFC-9685-D03E6EE2A615}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame3D", "Monogame3D\MonoGame3D.csproj", "{6F4186CB-040C-4CFC-9685-D03E6EE2A615}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Discord", "Discord\Discord.csproj", "{623BAA21-0053-4ECA-A52B-41CB5B3D3A97}"
 EndProject

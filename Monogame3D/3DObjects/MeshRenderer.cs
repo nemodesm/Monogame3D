@@ -2,24 +2,19 @@
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Monogame3D.Exceptions;
+using MonoGame3D.Exceptions;
 
-namespace Monogame3D._3DObjects;
+namespace MonoGame3D._3DObjects;
 
 public class MeshRenderer : LocalizedObject, ICameraDrawable
 {
-    private readonly Model _model;
-
-    public MeshRenderer([NotNull] Model model)
-    {
-        _model = model;
-    }
+    private readonly Model? _model;
 
     public MeshRenderer(string modelName)
     {
         try
         {
-            _model = Engine.Content.Load<Model>(modelName);
+            _model = ContentManager.RequestContent<Model>(modelName, this);
         }
         catch (Exception e)
         {
@@ -42,6 +37,9 @@ public class MeshRenderer : LocalizedObject, ICameraDrawable
 
     void ICameraDrawable.Draw(GameTime gameTime, Camera camera)
     {
+        if (_model is null)
+            return;
+        
         foreach (var mesh in _model.Meshes)
         {
             // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator

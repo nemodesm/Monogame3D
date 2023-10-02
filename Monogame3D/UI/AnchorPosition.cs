@@ -1,4 +1,4 @@
-﻿namespace Monogame3D.UI;
+﻿namespace MonoGame3D.UI;
 
 /// <summary>
 /// The position relative to the screen to anchor this UI Element
