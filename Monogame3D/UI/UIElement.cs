@@ -307,7 +307,7 @@ public class UIElement : GameElement, ICanvasDrawable, IUpdateable
         }
     }
 
-    public void Update(GameTime gameTime)
+    public override void Update(GameTime gameTime)
     {
         if (!this.Enabled)
         {

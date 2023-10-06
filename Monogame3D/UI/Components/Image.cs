@@ -61,11 +61,11 @@ public class Image : UIComponent
         {
             if (AnchorPosition == AnchorPosition.Absolute)
             {
-                spriteBatch.Draw(_image, UIElement!.Position, ColorTint);
+                spriteBatch.Draw(_image, Element!.Position, ColorTint);
                 return;
             }
 
-            spriteBatch.Draw(_image, UIElement!.ScaledPosition, ColorTint);
+            spriteBatch.Draw(_image, Element!.ScaledPosition, ColorTint);
         }
         catch (ArgumentNullException e)
         {

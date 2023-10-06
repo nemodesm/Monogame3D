@@ -9,8 +9,8 @@ namespace MonoGame3D.UI;
 /// </summary>
 public abstract class UIComponent : IUpdateable, ICanvasDrawable
 {
-    protected internal UIElement? UIElement { get; set; }
-    protected Canvas Canvas => UIElement!.Canvas;
+    protected internal UIElement? Element { get; set; }
+    protected Canvas Canvas => Element!.Canvas;
     protected static Engine Engine => Engine.Instance;
     private bool _initialized;
 
@@ -18,12 +18,12 @@ public abstract class UIComponent : IUpdateable, ICanvasDrawable
         
     public AnchorPosition AnchorPosition
     {
-        get => _initialized ? UIElement!.AnchorPosition : _anchorPosition;
+        get => _initialized ? Element!.AnchorPosition : _anchorPosition;
         set
         {
             if (_initialized)
             {
-                UIElement!.AnchorPosition = value;
+                Element!.AnchorPosition = value;
             }
             else
             {
@@ -34,20 +34,20 @@ public abstract class UIComponent : IUpdateable, ICanvasDrawable
 
     public virtual bool Enabled
     {
-        get => UIElement!.Enabled;
-        set => UIElement!.Enabled = value;
+        get => Element!.Enabled;
+        set => Element!.Enabled = value;
     }
 
-    public virtual int UpdateOrder => UIElement!.UpdateOrder;
+    public virtual int UpdateOrder => Element!.UpdateOrder;
     public event EventHandler<EventArgs>? EnabledChanged
     {
-        add => UIElement!.EnabledChanged += value;
-        remove => UIElement!.EnabledChanged -= value;
+        add => Element!.EnabledChanged += value;
+        remove => Element!.EnabledChanged -= value;
     }
     public event EventHandler<EventArgs>? UpdateOrderChanged
     {
-        add => UIElement!.UpdateOrderChanged += value;
-        remove => UIElement!.UpdateOrderChanged -= value;
+        add => Element!.UpdateOrderChanged += value;
+        remove => Element!.UpdateOrderChanged -= value;
     }
 
     public virtual void Update(GameTime gameTime) { }
