@@ -33,6 +33,15 @@ public class Camera : LocalizedObject, IDrawable
 
     public void Draw(GameTime gameTime)
     {
+        Debug.Log("Drawing Camera");
+        
+        // TODO: _camTarget need to be replaced with PositionedObject.Forward (which is not implemented)
+        var _camTarget = Vector3.Zero;
+        ViewMatrix = Matrix.CreateLookAt(Position, _camTarget,
+            new Vector3(0f, 1f, 0f));// Y up
+        WorldMatrix = Matrix.CreateWorld(_camTarget, Vector3.
+            Forward, Vector3.Up);
+        
         Engine.GraphicsDevice.Clear(ClearColor);
 
         foreach (var drawable in _drawnObjects)
@@ -47,14 +56,10 @@ public class Camera : LocalizedObject, IDrawable
         RotationEuler = Vector3.Zero;
         Position = new Vector3(0f, 1f, -10);
 
+        // TODO: check whether 45f constant is field of view, and make that a setting
         ProjectionMatrix = Matrix.CreatePerspectiveFieldOfView(
             MathHelper.ToRadians(45f), Engine.GraphicsDevice.Viewport.AspectRatio,
             1f, 1000f);
-        // TODO: _camTarget need to be replaced with PositionedObject.Forward (which is not implemented)
-        // ViewMatrix = Matrix.CreateLookAt(Position, _camTarget,
-        //     new Vector3(0f, 1f, 0f));// Y up
-        // WorldMatrix = Matrix.CreateWorld(_camTarget, Vector3.
-        //     Forward, Vector3.Up);
 
         base.Initialize();
     }
