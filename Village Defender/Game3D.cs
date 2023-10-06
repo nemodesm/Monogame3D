@@ -15,9 +15,29 @@ internal class Game3D : Engine
         Canvas.AddElement(new UIElement(
             new Button(() => Debug.Log("Button Clicked")),
             new Image(anchorPosition: AnchorPosition.Center)));
-        Canvas.AddElement(new UIElement(
+
+        var child = new UIElement(
             new Button(() => Debug.Log("Button Clicked")),
-            new Image(anchorPosition: AnchorPosition.BottomLeft, new Vector2(30))));
+            new Image(anchorPosition: AnchorPosition.BottomLeft));
+        Canvas.AddElement(child);
+        
+        var childofchild = new UIElement("Child of Child", new Rectangle(30, 30, 100, 100), 
+            new Button(() => Debug.Log("Button Clicked")),
+            new Image(anchorPosition: AnchorPosition.TopLeft));
+        
+        child.AddElement(childofchild);
+        
+        var childofchildofchild = new UIElement("Child of Child of Child", new Rectangle(0, 0, 50, 50), 
+            new Button(() => Debug.Log("Button Clicked")),
+            new Image(anchorPosition: AnchorPosition.Center));
+        
+        childofchild.AddElement(childofchildofchild);
+        
+        var childofchildofchild2 = new UIElement("Child of Child of Child", new Rectangle(0, 0, 50, 50), 
+            new Button(() => Debug.Log("Button Clicked")),
+            new Image(anchorPosition: AnchorPosition.TopCenter));
+        
+        childofchild.AddElement(childofchildofchild2);
             
         base.Initialize();
     }

@@ -15,7 +15,7 @@ public class Button : SelectableUIComponent
         private Action? _action;
 
         public ButtonEvent() { }
-        internal ButtonEvent(Action action)
+        internal ButtonEvent(Action? action)
         {
             _action = action;
         }
@@ -52,12 +52,11 @@ public class Button : SelectableUIComponent
 
     private Vector2 _size;
 
-    public Button(Action? selectAction, Vector2 size = default, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default)
+    public Button(Action? selectAction, Vector2 size = default, AnchorPosition anchorPosition = AnchorPosition.TopLeft)
     {
         OnSubmit = new ButtonEvent(selectAction);
         _size = size;
         AnchorPosition = anchorPosition;
-        Offset = offset;
     }
     public Button() { }
 
