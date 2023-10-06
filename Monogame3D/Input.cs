@@ -12,7 +12,7 @@ public static class Input
     {
         try
         {
-            return MInput.Keyboard!.Pressed(key);
+            return MInput.Keyboard.Pressed(key);
         }
         catch (NullReferenceException e)
         {
@@ -25,7 +25,7 @@ public static class Input
     {
         try
         {
-            return MInput.Keyboard!.Check(key);
+            return MInput.Keyboard.Check(key);
         }
         catch (NullReferenceException e)
         {
@@ -38,7 +38,7 @@ public static class Input
     {
         try
         {
-            return MInput.Keyboard!.Released(key);
+            return MInput.Keyboard.Released(key);
         }
         catch (NullReferenceException e)
         {

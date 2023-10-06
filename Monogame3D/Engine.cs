@@ -11,21 +11,22 @@ public abstract class Engine : Game
     /// <summary>
     /// The current instance of the engine
     /// </summary>
-    public static Engine Instance { get; private set; }
+    public static Engine Instance { get; private set; } = null!;
         
     /// <summary>
     /// The graphics device manager for the game
     /// </summary>
-    public static GraphicsDeviceManager Graphics { get; private set; }
+    public static GraphicsDeviceManager Graphics { get; private set; } = null!;
 
     /// <summary>
     /// The rendering camera for the game
     /// </summary>
-    public static Camera Camera { get; private set; }
+    public static Camera Camera { get; private set; } = null!;
+
     /// <summary>
     /// The main UI Canvas for the game
     /// </summary>
-    public static Canvas Canvas { get; private set; }
+    public static Canvas Canvas { get; private set; } = null!;
 
     public static float DeltaTime { get; private set; }
     public static Matrix ScreenMatrix { get; set; }
@@ -55,8 +56,6 @@ public abstract class Engine : Game
         Instance = this;
 
         SetupGraphics();
-            
-        InitializeHelperClasses();
 
         InitializeRootComponents();
     }
@@ -79,11 +78,6 @@ public abstract class Engine : Game
         Components.Add(Camera);
         Components.Add(Canvas);
         MInput.Initialize();
-    }
-
-    private void InitializeHelperClasses()
-    {
-        // Debug.Initialise();
     }
 
     protected override void Initialize()

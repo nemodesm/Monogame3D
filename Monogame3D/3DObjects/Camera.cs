@@ -13,8 +13,27 @@ public class Camera : LocalizedObject, IDrawable
     public Matrix WorldMatrix;
     public Matrix ProjectionMatrix;
 
-    public int DrawOrder => 0;
-    public bool Visible => true;
+    private int _drawOrder = 0;
+    private bool _visible = true;
+    public int DrawOrder
+    {
+        get => _drawOrder;
+        private set
+        {
+            DrawOrderChanged?.Invoke(this, EventArgs.Empty);
+            _drawOrder = value;
+        }
+    }
+
+    public bool Visible
+    {
+        get => _visible;
+        private set
+        {
+            VisibleChanged?.Invoke(this, EventArgs.Empty);
+            _visible = value;
+        }
+    }
 
     public Color ClearColor { get; set; } = Color.CornflowerBlue;
 
