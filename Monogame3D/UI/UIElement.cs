@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame3D.UI;
 
-public class UIElement : ICanvasDrawable, IUpdateable
+public class UIElement : GameElement, ICanvasDrawable, IUpdateable
 {
     #region Fields
 
@@ -18,26 +18,7 @@ public class UIElement : ICanvasDrawable, IUpdateable
     /// <remarks>
     /// No checks are made to ensure that this name is unique in the UI tree
     /// </remarks>
-    public string Name;
-    protected static Engine Engine => Engine.Instance;
-
-    private bool _enabled = true;
-    
-    /// <summary>
-    /// Whether this UI element is enabled
-    /// </summary>
-    /// <remarks>
-    /// Inactive UI elements will not be drawn or updated
-    /// </remarks>
-    public bool Enabled
-    {
-        get => _enabled;
-        set
-        {
-            EnabledChanged?.Invoke(this, EventArgs.Empty);
-            _enabled = value;
-        }
-    }
+    public override string Name { get; set; } = "UI Element";
 
     #endregion
 
@@ -144,19 +125,6 @@ public class UIElement : ICanvasDrawable, IUpdateable
     /// The list of components that are attached to this UI element
     /// </summary>
     protected readonly HashSet<UIComponent> Components = new();
-    
-    private int _updateOrder = 0;
-    public int UpdateOrder
-    {
-        get => _updateOrder;
-        private init
-        {
-            UpdateOrderChanged?.Invoke(this, EventArgs.Empty);
-            _updateOrder = value;
-        }
-    }
-    public event EventHandler<EventArgs>? EnabledChanged;
-    public event EventHandler<EventArgs>? UpdateOrderChanged;
 
     #endregion
 
@@ -171,7 +139,7 @@ public class UIElement : ICanvasDrawable, IUpdateable
             
         foreach (var component in components)
         {
-            component.UIElement = this;
+            component.Element = this;
             Components.Add(component);
         }
     }
@@ -205,11 +173,11 @@ public class UIElement : ICanvasDrawable, IUpdateable
     /// <param name="component">The component to add to this element</param>
     public virtual void AddComponent(UIComponent component)
     {
-        if (component.UIElement != this && component.UIElement is not null)
+        if (component.Element != this && component.Element is not null)
         {
             Debug.LogError(new InvalidOperationException());
         }
-        component.UIElement = this;
+        component.Element = this;
         Components.Add(component);
             
         component.Initialise();
