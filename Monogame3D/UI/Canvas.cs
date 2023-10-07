@@ -6,6 +6,8 @@ namespace MonoGame3D.UI;
 
 public sealed class Canvas : UIElement, IGameComponent, IDrawable
 {
+    public override string Name => "Canvas";
+
     private SpriteBatch? _spriteBatch;
 
     public override AnchorPosition AnchorPosition => AnchorPosition.Center;
@@ -27,7 +29,7 @@ public sealed class Canvas : UIElement, IGameComponent, IDrawable
         if (!_initialized) Initialize();
 
         _spriteBatch!.Begin();
-        foreach (var uiElement in ChildUIElements)
+        foreach (var uiElement in Children)
         {
             uiElement.Draw(gameTime, _spriteBatch);
         }
@@ -37,7 +39,7 @@ public sealed class Canvas : UIElement, IGameComponent, IDrawable
     public new void Initialize()
     {
         _spriteBatch = new SpriteBatch(Engine.GraphicsDevice);
-        foreach (var uiElement in ChildUIElements)
+        foreach (var uiElement in Children)
         {
             uiElement.Initialize();
         }

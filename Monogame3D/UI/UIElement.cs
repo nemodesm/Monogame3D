@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame3D.UI;
 
-public class UIElement : GameElement, ICanvasDrawable, IUpdateable
+public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
 {
     #region Fields
 
@@ -19,6 +19,8 @@ public class UIElement : GameElement, ICanvasDrawable, IUpdateable
     /// No checks are made to ensure that this name is unique in the UI tree
     /// </remarks>
     public override string Name { get; set; } = "UI Element";
+    
+    protected internal Canvas Canvas => (Parent is null ? this as Canvas : Parent.Canvas)!;
 
     #endregion
 
@@ -46,7 +48,7 @@ public class UIElement : GameElement, ICanvasDrawable, IUpdateable
                 return Position;
             }
             
-            var scaledParent = _parent!.ScaledPosition;
+            var scaledParent = Parent!.ScaledPosition;
             var (screenWidthRatio, screenHeightRatio) = (Engine.Graphics.PreferredBackBufferWidth / 1920f, Engine.Graphics.PreferredBackBufferHeight / 1080f);
             var (x, y) = ((int)(Position.X * screenWidthRatio), (int)(Position.Y * screenHeightRatio));
             var (width, height) = ((int)(Position.Width * screenWidthRatio), (int)(Position.Height * screenHeightRatio));
@@ -101,24 +103,6 @@ public class UIElement : GameElement, ICanvasDrawable, IUpdateable
 
     #endregion
 
-    #region Hierarchy
-
-    private UIElement? _parent;
-    
-    protected internal Canvas Canvas => (_parent is null ? this as Canvas : _parent.Canvas)!;
-    
-    /// <summary>
-    /// The list of all child UI elements
-    /// </summary>
-    protected readonly List<UIElement> ChildUIElements = new();
-    
-    /// <summary>
-    /// The number of children this element has
-    /// </summary>
-    public int ChildCount => ChildUIElements.Count;
-
-    #endregion
-
     #region Object Fields
     
     /// <summary>
@@ -156,8 +140,8 @@ public class UIElement : GameElement, ICanvasDrawable, IUpdateable
         this.AnchorPosition = uiElement.AnchorPosition;
         this.Enabled = uiElement.Enabled;
         this.UpdateOrder = uiElement.UpdateOrder;
-        this._parent = uiElement._parent;
-        this.ChildUIElements = uiElement.ChildUIElements;
+        this.Parent = uiElement.Parent;
+        this.Children = uiElement.Children;
         this.Components = uiElement.Components;
     }
 
@@ -209,69 +193,6 @@ public class UIElement : GameElement, ICanvasDrawable, IUpdateable
     public T[] GetComponents<T>() where T : UIComponent => Components.OfType<T>().ToArray();
 
     #endregion
-
-    #region Hierarchy
-
-    #region Modification
-    
-    /// <summary>
-    /// Adds a new UI Element as a child of this one
-    /// </summary>
-    /// <param name="element">The element to add as child</param>
-    public void AddElement(UIElement element)
-    {
-        element._parent = this;
-        ChildUIElements.Add(element);
-    }
-
-    /// <summary>
-    /// Removes the UI Element from the canvas
-    /// </summary>
-    /// <param name="element">The element to remove as child</param>
-    public void RemoveElement(UIElement element)
-    {
-        if (element._parent != this)
-        {
-            Debug.LogError(new InvalidOperationException(
-                $"Attempted to remove {element} from children of {this} when it was not a child to " +
-                "begin with"));
-        }
-        element._parent = null;
-        ChildUIElements.Remove(element);
-    }
-
-    #endregion
-    
-    #region Navigation
-
-    /// <summary>
-    /// Returns the child at the given index
-    /// </summary>
-    /// <param name="i">The index of the child to return</param>
-    /// <returns>The child</returns>
-    public UIElement? GetChild(int i) => i < ChildUIElements.Count ? ChildUIElements[i] : null;
-
-    /// <summary>
-    /// Returns the first child that has the given name
-    /// </summary>
-    /// <param name="name">The name to look for</param>
-    /// <returns>The first child that matches the given name</returns>
-    public UIElement? GetChildByName(string name)
-    {
-        foreach (var child in ChildUIElements)
-        {
-            if (child.Name == name)
-            {
-                return child;
-            }
-        }
-
-        return null;
-    }
-
-    #endregion
-
-    #endregion
     
     public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
@@ -285,7 +206,7 @@ public class UIElement : GameElement, ICanvasDrawable, IUpdateable
             component.Draw(gameTime, spriteBatch);
         }
 
-        foreach (var uiElement in ChildUIElements)
+        foreach (var uiElement in Children)
         {
             if (uiElement.Enabled)
             {
@@ -296,7 +217,7 @@ public class UIElement : GameElement, ICanvasDrawable, IUpdateable
 
     public void Initialize()
     {
-        foreach (var element in ChildUIElements)
+        foreach (var element in Children)
         {
             element.Initialize();
         }
@@ -304,24 +225,6 @@ public class UIElement : GameElement, ICanvasDrawable, IUpdateable
         foreach (var component in Components)
         {
             component.Initialise();
-        }
-    }
-
-    public override void Update(GameTime gameTime)
-    {
-        if (!this.Enabled)
-        {
-            return;
-        }
-        
-        foreach (var element in ChildUIElements)
-        {
-            element.Update(gameTime);
-        }
-
-        foreach (var component in Components)
-        {
-            component.Update(gameTime);
         }
     }
 
