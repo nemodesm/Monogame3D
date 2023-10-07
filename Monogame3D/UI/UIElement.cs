@@ -20,22 +20,34 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
     /// </remarks>
     public override string Name { get; set; } = "UI Element";
     
-    protected internal Canvas Canvas => (Parent is null ? this as Canvas : Parent.Canvas)!;
+    protected internal Canvas Canvas => Parent is null ? (Canvas)this : Parent.Canvas;
 
     #endregion
 
     #region Positioning
     
+    private AnchorPosition _anchorPosition;
+    
     /// <summary>
     /// Where this UI element is anchored to relative to the parent element
     /// </summary>
-    public virtual AnchorPosition AnchorPosition { get; set; }
+    public virtual AnchorPosition AnchorPosition
+    {
+        get => _anchorPosition;
+        set => _anchorPosition = value;
+    }
+
+    private Rectangle _position = new(0, 0, 100, 100);
 
     /// <summary>
     /// The bounding rectangle of this UI element as it would appear on a 1920x1080 screen
     /// </summary>
-    public virtual Rectangle Position { get; set; } = new(0, 0, 100, 100);
-    
+    public virtual Rectangle Position
+    {
+        get => _position;
+        set => _position = value;
+    }
+
     /// <summary>
     /// The bounding rectangle of this UI element as it would appear on the current screen
     /// </summary>
@@ -49,57 +61,61 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
             }
             
             var scaledParent = Parent!.ScaledPosition;
-            var (screenWidthRatio, screenHeightRatio) = (Engine.Graphics.PreferredBackBufferWidth / 1920f, Engine.Graphics.PreferredBackBufferHeight / 1080f);
-            var (x, y) = ((int)(Position.X * screenWidthRatio), (int)(Position.Y * screenHeightRatio));
-            var (width, height) = ((int)(Position.Width * screenWidthRatio), (int)(Position.Height * screenHeightRatio));
+            var screenScale = ScreenScale;
+            var (x, y) = ((int)(Position.X * screenScale.X), (int)(Position.Y * screenScale.Y));
+            var (width, height) = ((int)(Position.Width * screenScale.X), (int)(Position.Height * screenScale.Y));
             
             return AnchorPosition switch
             {
-                AnchorPosition.TopLeft => new(x + scaledParent.X, y + scaledParent.Y, width, height),
-                AnchorPosition.TopCenter => new(
+                AnchorPosition.TopLeft => new Rectangle(x + scaledParent.X, y + scaledParent.Y, width, height),
+                AnchorPosition.TopCenter => new Rectangle(
                     scaledParent.Width / 2 - width / 2 + scaledParent.X,
                     y + scaledParent.Y,
                     width,
                     height),
-                AnchorPosition.TopRight => new(
+                AnchorPosition.TopRight => new Rectangle(
                     scaledParent.Width - width - x + scaledParent.X,
                     y + scaledParent.Y,
                     width,
                     height),
-                AnchorPosition.CenterLeft => new(
+                AnchorPosition.CenterLeft => new Rectangle(
                     x + scaledParent.X,
                     scaledParent.Height / 2 - height / 2 + scaledParent.Y,
                     width,
                     height),
-                AnchorPosition.Center => new(
+                AnchorPosition.Center => new Rectangle(
                     scaledParent.Width / 2 - width / 2 + scaledParent.X,
                     scaledParent.Height / 2 - height / 2 + scaledParent.Y,
                     width,
                     height),
-                AnchorPosition.CenterRight => new(
+                AnchorPosition.CenterRight => new Rectangle(
                     scaledParent.Width - width - x + scaledParent.X,
                     scaledParent.Height / 2 - height / 2 + scaledParent.Y,
                     width,
                     height),
-                AnchorPosition.BottomLeft => new(
+                AnchorPosition.BottomLeft => new Rectangle(
                     x + scaledParent.X,
                     scaledParent.Height - height - y + scaledParent.Y,
                     width,
                     height),
-                AnchorPosition.BottomCenter => new(
+                AnchorPosition.BottomCenter => new Rectangle(
                     scaledParent.Width / 2 - width / 2 + scaledParent.X,
                     scaledParent.Height - height - y + scaledParent.Y,
                     width,
                     height),
-                AnchorPosition.BottomRight => new(
+                AnchorPosition.BottomRight => new Rectangle(
                     scaledParent.Width - width - x + scaledParent.X,
                     scaledParent.Height - height - y + scaledParent.Y,
                     width,
                     height),
+                AnchorPosition.Absolute => throw new ArgumentOutOfRangeException(),
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
     }
+
+    public Vector2 ScreenScale => new(Engine.Graphics.PreferredBackBufferWidth / 1920f,
+        Engine.Graphics.PreferredBackBufferHeight / 1080f);
 
     #endregion
 
@@ -119,6 +135,7 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
     public UIElement(params UIComponent[] components) : this("New UI Element", components) { }
     public UIElement(string name, params UIComponent[] components)
     {
+        // ReSharper disable once VirtualMemberCallInConstructor
         this.Name = name;
             
         foreach (var component in components)
@@ -127,14 +144,21 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
             Components.Add(component);
         }
     }
-    public UIElement(string name, Rectangle position, params UIComponent[] components) : this(name, components)
+    public UIElement(Rectangle position, AnchorPosition anchorPosition, params UIComponent[] components) : this("New UI Element", components)
     {
-        this.Position = position;
+        this._position = position;
+        this._anchorPosition = anchorPosition;
+    }
+    public UIElement(string name, Rectangle position, AnchorPosition anchorPosition, params UIComponent[] components) : this(name, components)
+    {
+        this._position = position;
+        this._anchorPosition = anchorPosition;
     }
     
-    [Obsolete(message: "Support for copying properties from one UI element to another was removed in alpha dev 3, any newer feature will not be copied")]
+    [Obsolete(message: "Support for copying properties from one UI element to another was removed in alpha 3, any newer feature will not be copied")]
     public UIElement(UIElement uiElement)
     {
+        // ReSharper disable once VirtualMemberCallInConstructor
         this.Name = uiElement.Name;
         // ReSharper disable once VirtualMemberCallInConstructor
         this.AnchorPosition = uiElement.AnchorPosition;

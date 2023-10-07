@@ -36,19 +36,8 @@ public class Image : UIComponent
         }
     }
 
-    public Image(AnchorPosition anchorPosition = AnchorPosition.TopLeft) : this(
-        "Engine\\defaultUIImage", anchorPosition)
-    {
-    }
-    public Image(string imagePath, AnchorPosition anchorPosition = AnchorPosition.TopLeft)
-    {
-        this._imagePath = imagePath;
-        if (anchorPosition == AnchorPosition.Absolute)
-        {
-            Debug.LogWarning($"Drawing {this} with absolute positioning, which is not recommended");
-        }
-        AnchorPosition = anchorPosition;
-    }
+    public Image() : this("Engine\\defaultUIImage") { }
+    public Image(string imagePath) => this._imagePath = imagePath;
 
     ~Image()
     {
@@ -59,12 +48,6 @@ public class Image : UIComponent
     {
         try
         {
-            if (AnchorPosition == AnchorPosition.Absolute)
-            {
-                spriteBatch.Draw(_image, Element!.Position, ColorTint);
-                return;
-            }
-
             spriteBatch.Draw(_image, Element!.ScaledPosition, ColorTint);
         }
         catch (ArgumentNullException e)

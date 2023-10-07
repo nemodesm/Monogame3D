@@ -14,11 +14,11 @@ public abstract class UIComponent : IUpdateable, ICanvasDrawable
     protected static Engine Engine => Engine.Instance;
     private bool _initialized;
 
-    private AnchorPosition _anchorPosition;
+    private AnchorPosition? _anchorPosition { get; set; } = null;
         
     public AnchorPosition AnchorPosition
     {
-        get => _initialized ? Element!.AnchorPosition : _anchorPosition;
+        get => _initialized ? Element!.AnchorPosition : _anchorPosition ?? AnchorPosition.Absolute;
         set
         {
             if (_initialized)
@@ -31,6 +31,14 @@ public abstract class UIComponent : IUpdateable, ICanvasDrawable
             }
         }
     }
+    
+    public Rectangle Position
+    {
+        get => Element!.Position;
+        set => Element!.Position = value;
+    }
+    
+    public Rectangle ScaledPosition => Element!.ScaledPosition;
 
     public virtual bool Enabled
     {
@@ -57,6 +65,9 @@ public abstract class UIComponent : IUpdateable, ICanvasDrawable
     internal virtual void Initialise()
     {
         _initialized = true;
-        AnchorPosition = _anchorPosition;
+        if (_anchorPosition is not null)
+        {
+            AnchorPosition = _anchorPosition.Value;
+        }
     }
 }

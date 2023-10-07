@@ -69,11 +69,10 @@ public class Button : SelectableUIComponent
     /// <param name="selectAction">The action that will be called when the button is selected</param>
     /// <param name="submitAction">The action that will be called when the button is clicked</param>
     /// <param name="anchorPosition"></param>
-    public Button(Action? selectAction = null, Action? submitAction = null, AnchorPosition anchorPosition = AnchorPosition.TopLeft)
+    public Button(Action? selectAction = null, Action? submitAction = null)
     {
         OnSelect = new ButtonEvent(selectAction);
         OnSubmit = new ButtonEvent(submitAction);
-        AnchorPosition = anchorPosition;
     }
     public Button() { }
 
