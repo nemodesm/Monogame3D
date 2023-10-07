@@ -15,33 +15,10 @@ internal class Game3D : Engine
 {
     protected override void Initialize()
     {
-        Canvas.AddElement(new UIElement(
-            new Button(submitAction: () => Debug.Log("Button Clicked")),
-            new Image(anchorPosition: AnchorPosition.Center)));
+        // TestUI();
         
-        var child = new UIElement(
-            new Button(submitAction: () => Debug.Log("Button Clicked")),
-            new Image(anchorPosition: AnchorPosition.BottomLeft));
-        Canvas.AddElement(child);
+        TestText();
         
-        var childofchild = new UIElement("Child of Child", new Rectangle(30, 30, 100, 100),
-            new Button(submitAction: () => Debug.Log("Button Clicked")),
-            new Image(anchorPosition: AnchorPosition.TopLeft));
-        
-        child.AddElement(childofchild);
-        
-        var childofchildofchild = new UIElement("Child of Child of Child", new Rectangle(0, 0, 50, 50),
-            new Button(submitAction: () => Debug.Log("Button Clicked")),
-            new Image(anchorPosition: AnchorPosition.Center));
-        
-        childofchild.AddElement(childofchildofchild);
-        
-        var childofchildofchild2 = new UIElement("Child of Child of Child", new Rectangle(0, 0, 50, 50),
-            new Button(submitAction: () => Debug.Log("Button Clicked")),
-            new Image(anchorPosition: AnchorPosition.TopCenter));
-        
-        childofchild.AddElement(childofchildofchild2);
-            
         base.Initialize();
     }
 
@@ -60,6 +37,58 @@ internal class Game3D : Engine
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
         
+        Camera.Position.X += 0.01f;
+            
+        // Really aggressive garbage collection to make sure no assets are unintentionally unloaded in destructors
+        GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+            
+        base.Update(gameTime);
+    }
+
+    private void TestXmlUI()
+    {
+        // TODO: add xml ui tests
+    }
+
+    private void TestUI()
+    {
+        Canvas.AddElement(new UIElement(
+            new Rectangle(0, 0, 100, 100),
+            AnchorPosition.Center,
+            new Button(submitAction: () => Debug.Log("Button Clicked")),
+            new Image()));
+        
+        var child = new UIElement(
+            new Rectangle(0, 0, 100, 100),
+            AnchorPosition.BottomLeft,
+            new Button(submitAction: () => Debug.Log("Button Clicked")),
+            new Image());
+        Canvas.AddElement(child);
+        
+        var childofchild = new UIElement("Child of Child", new Rectangle(30, 30, 100, 100),
+            AnchorPosition.TopLeft,
+            new Button(submitAction: () => Debug.Log("Button Clicked")),
+            new Image());
+        
+        child.AddElement(childofchild);
+        
+        var childofchildofchild = new UIElement("Child of Child of Child", new Rectangle(0, 0, 50, 50),
+            AnchorPosition.Center,
+            new Button(submitAction: () => Debug.Log("Button Clicked")),
+            new Image());
+        
+        childofchild.AddElement(childofchildofchild);
+        
+        var childofchildofchild2 = new UIElement("Child of Child of Child", new Rectangle(0, 0, 50, 50),
+            AnchorPosition.TopCenter,
+            new Button(submitAction: () => Debug.Log("Button Clicked")),
+            new Image());
+        
+        childofchild.AddElement(childofchildofchild2);
+    }
+
+    private void TestUI_update(GameTime gameTime)
+    {
         // Remove element after 1 second to test asset unloading
         if (!removed && gameTime.TotalGameTime.Seconds > 1)
         {
@@ -68,12 +97,19 @@ internal class Game3D : Engine
             Canvas.RemoveElement(Canvas.GetChild(1));
             Debug.Log("Removed UI Element");
         }
-        
-        Camera.Position.X += 0.01f;
-            
-        // Really aggressive garbage collection to make sure no assets are unintentionally unloaded in destructors
-        GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
-            
-        base.Update(gameTime);
+    }
+
+    private void TestText()
+    {
+        foreach (var anchorPosition in new AnchorPosition[]
+                 {
+                     AnchorPosition.Absolute,
+                     AnchorPosition.TopLeft, AnchorPosition.TopCenter, AnchorPosition.TopRight,
+                     AnchorPosition.CenterLeft, AnchorPosition.Center, AnchorPosition.CenterRight,
+                     AnchorPosition.BottomLeft, AnchorPosition.BottomCenter, AnchorPosition.BottomRight
+                 })
+        {
+            Canvas.AddElement(new UIElement(new Rectangle(0, 0, -1, -1), anchorPosition, new Text(anchorPosition.ToString(), Color.Red)));
+        }
     }
 }
