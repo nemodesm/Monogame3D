@@ -5,7 +5,12 @@ using MonoGame3D;
 
 namespace VillageDefender;
 
-internal class VillageDefender : Game
+// TODO: Create demo
+
+/// <summary>
+/// A demo game using the MonoGame3D engine
+/// </summary>
+internal class VillageDefender : Engine
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
@@ -21,10 +26,6 @@ internal class VillageDefender : Game
     {
         // TODO: Add your initialization logic here
 
-        Debug.Log("this is a log");
-        Debug.LogWarning("this is a warn");
-        Debug.LogError("this is an error");
-
         base.Initialize();
     }
 
@@ -34,7 +35,7 @@ internal class VillageDefender : Game
 
         Services.AddService(typeof(SpriteBatch), _spriteBatch);
 
-        // TODO: use this.Content to load your game content here
+        // TODO: use ContentManager.RequestContent<T> to load your game content here
     }
 
     protected override void Update(GameTime gameTime)
@@ -45,18 +46,5 @@ internal class VillageDefender : Game
         // TODO: Add your update logic here
 
         base.Update(gameTime);
-    }
-
-    protected override void Draw(GameTime gameTime)
-    {
-        GraphicsDevice.Clear(Color.CornflowerBlue);
-
-        _spriteBatch.Begin();
-        //_spriteBatch.Draw(texture, position, Color.White);
-        _spriteBatch.End();
-
-        // TODO: Add your drawing code here
-
-        base.Draw(gameTime);
     }
 }

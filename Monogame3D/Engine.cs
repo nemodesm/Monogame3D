@@ -11,28 +11,50 @@ public abstract class Engine : Game
     /// <summary>
     /// The current instance of the engine
     /// </summary>
-    public static Engine Instance { get; private set; }
+    public static Engine Instance { get; private set; } = null!;
         
     /// <summary>
     /// The graphics device manager for the game
     /// </summary>
-    public static GraphicsDeviceManager Graphics { get; private set; }
+    public static GraphicsDeviceManager Graphics { get; private set; } = null!;
 
     /// <summary>
     /// The rendering camera for the game
     /// </summary>
-    public static Camera Camera { get; private set; }
+    public static Camera Camera { get; private set; } = null!;
+
     /// <summary>
     /// The main UI Canvas for the game
     /// </summary>
-    public static Canvas Canvas { get; private set; }
+    public static Canvas Canvas { get; private set; } = null!;
 
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
     public static float DeltaTime { get; private set; }
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
     public static Matrix ScreenMatrix { get; set; }
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
     public static int Width { get; private set; }
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
     public static int Height { get; private set; }
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
     public static int ViewWidth { get; private set; }
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
     public static int ViewHeight { get; private set; }
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
     public static int ViewPadding
     {
         get => viewPadding;
@@ -42,7 +64,14 @@ public abstract class Engine : Game
             Instance.UpdateView();
         }
     }
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
     private static int viewPadding;
+    
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
     public static Viewport Viewport { get; private set; }
 
     // time
@@ -55,8 +84,6 @@ public abstract class Engine : Game
         Instance = this;
 
         SetupGraphics();
-            
-        InitializeHelperClasses();
 
         InitializeRootComponents();
     }
@@ -79,11 +106,6 @@ public abstract class Engine : Game
         Components.Add(Camera);
         Components.Add(Canvas);
         MInput.Initialize();
-    }
-
-    private void InitializeHelperClasses()
-    {
-        // Debug.Initialise();
     }
 
     protected override void Initialize()
@@ -110,8 +132,7 @@ public abstract class Engine : Game
     }
 
     protected sealed override void Draw(GameTime gameTime) => base.Draw(gameTime);
-        
-        
+    
     private void UpdateView()
     {
         float screenWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;

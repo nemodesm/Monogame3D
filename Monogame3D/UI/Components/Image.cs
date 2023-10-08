@@ -10,7 +10,7 @@ public class Image : UIComponent
     /// <summary>
     /// The texture that this image displays
     /// </summary>
-    private Texture2D _image;
+    private Texture2D? _image;
     
     /// <summary>
     /// The path to the texture that this image displays
@@ -36,20 +36,8 @@ public class Image : UIComponent
         }
     }
 
-    public Image(AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default) : this(
-        "Engine\\defaultUIImage", anchorPosition, offset)
-    {
-    }
-    public Image(string imagePath, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default)
-    {
-        this._imagePath = imagePath;
-        if (anchorPosition == AnchorPosition.Absolute)
-        {
-            Debug.LogWarning($"Drawing {this} with absolute positioning, which is not recommended");
-        }
-        AnchorPosition = anchorPosition;
-        Offset = offset;
-    }
+    public Image() : this("Engine\\defaultUIImage") { }
+    public Image(string imagePath) => this._imagePath = imagePath;
 
     ~Image()
     {
@@ -60,39 +48,7 @@ public class Image : UIComponent
     {
         try
         {
-            if (AnchorPosition == AnchorPosition.Absolute)
-            {
-                spriteBatch.Draw(_image, Offset, ColorTint);
-                return;
-            }
-
-            var (screenX, screenY) = (Engine.Graphics.PreferredBackBufferWidth,
-                Engine.Graphics.PreferredBackBufferHeight);
-            Vector2 position = default;
-            position.X = AnchorPosition switch
-            {
-                AnchorPosition.TopLeft or AnchorPosition.CenterLeft or AnchorPosition.BottomLeft => 0,
-                // ReSharper disable PossibleLossOfFraction
-                AnchorPosition.TopCenter or AnchorPosition.Center or AnchorPosition.BottomCenter => screenX / 2 -
-                    _image.Width / 2,
-                // ReSharper restore PossibleLossOfFraction
-                AnchorPosition.TopRight or AnchorPosition.CenterRight or AnchorPosition.BottomRight => screenX -
-                    _image.Width,
-                _ => position.Y
-            };
-            position.Y = AnchorPosition switch
-            {
-                AnchorPosition.TopLeft or AnchorPosition.TopCenter or AnchorPosition.TopRight => 0,
-                // ReSharper disable PossibleLossOfFraction
-                AnchorPosition.CenterLeft or AnchorPosition.Center or AnchorPosition.CenterRight => screenY / 2 -
-                    _image.Height / 2,
-                // ReSharper restore PossibleLossOfFraction
-                AnchorPosition.BottomLeft or AnchorPosition.BottomCenter or AnchorPosition.BottomRight => screenY -
-                    _image.Height,
-                _ => position.Y
-            };
-
-            spriteBatch.Draw(_image, position + Offset, ColorTint);
+            spriteBatch.Draw(_image, Element!.ScaledPosition, ColorTint);
         }
         catch (ArgumentNullException e)
         {

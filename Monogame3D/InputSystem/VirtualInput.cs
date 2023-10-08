@@ -14,7 +14,7 @@ public abstract class VirtualInput
     {
         try
         {
-            MInput.VirtualInputs!.Add(this);
+            MInput.VirtualInputs.Add(this);
         }
         catch (NullReferenceException e)
         {
@@ -26,7 +26,7 @@ public abstract class VirtualInput
     {
         try
         {
-            MInput.VirtualInputs!.Remove(this);
+            MInput.VirtualInputs.Remove(this);
         }
         catch (NullReferenceException e)
         {

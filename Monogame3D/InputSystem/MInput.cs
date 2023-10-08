@@ -14,11 +14,11 @@ namespace MonoGame3D.InputSystem;
 /// </summary>
 public static partial class MInput
 {
-    public static KeyboardData? Keyboard { get; private set; }
-    public static MouseData? Mouse { get; private set; }
-    public static GamePadData[]? GamePads { get; private set; }
+    public static KeyboardData Keyboard { get; private set; } = new();
+    public static MouseData Mouse { get; private set; } = new();
+    public static GamePadData[] GamePads { get; private set; } = new GamePadData[4];
 
-    internal static List<VirtualInput>? VirtualInputs;
+    internal static List<VirtualInput> VirtualInputs = new();
 
     /// <summary>
     /// When false, disables registering input
@@ -48,7 +48,7 @@ public static partial class MInput
     /// </summary>
     internal static void Shutdown()
     {
-        foreach (var gamepad in GamePads!)
+        foreach (var gamepad in GamePads)
             gamepad.StopRumble();
     }
 
@@ -59,18 +59,18 @@ public static partial class MInput
     {
         if (Engine.Instance.IsActive && Active)
         {
-            Keyboard!.Update();
-            Mouse!.Update();
+            Keyboard.Update();
+            Mouse.Update();
 
             for (var i = 0; i < 4; i++)
-                GamePads![i].Update();
+                GamePads[i].Update();
         }
         else
         {
-            Keyboard!.UpdateNull();
-            Mouse!.UpdateNull();
+            Keyboard.UpdateNull();
+            Mouse.UpdateNull();
             for (var i = 0; i < 4; i++)
-                GamePads![i].UpdateNull();
+                GamePads[i].UpdateNull();
         }
 
         UpdateVirtualInputs();
@@ -81,10 +81,10 @@ public static partial class MInput
     /// </summary>
     public static void UpdateNull()
     {
-        Keyboard!.UpdateNull();
-        Mouse!.UpdateNull();
+        Keyboard.UpdateNull();
+        Mouse.UpdateNull();
         for (var i = 0; i < 4; i++)
-            GamePads![i].UpdateNull();
+            GamePads[i].UpdateNull();
 
         UpdateVirtualInputs();
     }
@@ -94,7 +94,7 @@ public static partial class MInput
     /// </summary>
     private static void UpdateVirtualInputs()
     {
-        foreach (var virtualInput in VirtualInputs!)
+        foreach (var virtualInput in VirtualInputs)
             virtualInput.Update();
     }
 
@@ -105,7 +105,7 @@ public static partial class MInput
     /// </summary>
     public static void RumbleFirst(float strength, float time)
     {
-        GamePads![0].Rumble(strength, time);
+        GamePads[0].Rumble(strength, time);
     }
 
     /// <summary>

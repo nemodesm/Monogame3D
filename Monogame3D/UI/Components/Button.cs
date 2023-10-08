@@ -3,10 +3,14 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Xna.Framework;
 using MonoGame3D.InputSystem;
 
+// TODO: button is not selectable
+// TODO: button is not clickable
+
 namespace MonoGame3D.UI.Components;
 
 public class Button : SelectableUIComponent
 {
+    // TODO: add better summary
     /// <summary>
     /// A generic event
     /// </summary>
@@ -15,13 +19,13 @@ public class Button : SelectableUIComponent
         private Action? _action;
 
         public ButtonEvent() { }
-        internal ButtonEvent(Action action)
+        internal ButtonEvent(Action? action)
         {
             _action = action;
         }
 
         /// <summary>
-        /// Adds <paramref name="action"/> as an action that'll be called when the button gets selected
+        /// Adds <paramref name="action"/> as an action that'll be called when the event gets triggered
         /// </summary>
         /// <param name="action">The listener to add</param>
         public void AddListener(Action action)
@@ -30,7 +34,7 @@ public class Button : SelectableUIComponent
         }
 
         /// <summary>
-        /// Removes <paramref name="action"/> as an action that'll be called when the button gets selected
+        /// Removes <paramref name="action"/> as an action that'll be called when the event gets triggered
         /// </summary>
         /// <param name="action">The listener to remove</param>
         public void RemoveListener(Action action)
@@ -38,6 +42,9 @@ public class Button : SelectableUIComponent
             _action -= action;
         }
 
+        /// <summary>
+        /// Triggers the event
+        /// </summary>
         public void Invoke()
         {
             _action?.Invoke();
@@ -49,22 +56,30 @@ public class Button : SelectableUIComponent
     /// </summary>
     [NotNull]
     public readonly ButtonEvent OnSubmit = new();
-
-    private Vector2 _size;
-
-    public Button(Action? selectAction, Vector2 size = default, AnchorPosition anchorPosition = AnchorPosition.TopLeft, Vector2 offset = default)
+    
+    /// <summary>
+    /// Event that is called when the button is selected
+    /// </summary>
+    [NotNull]
+    public readonly ButtonEvent OnSelect = new();
+    
+    /// <summary>
+    /// Creates a new button
+    /// </summary>
+    /// <param name="selectAction">The action that will be called when the button is selected</param>
+    /// <param name="submitAction">The action that will be called when the button is clicked</param>
+    /// <param name="anchorPosition"></param>
+    public Button(Action? selectAction = null, Action? submitAction = null)
     {
-        OnSubmit = new ButtonEvent(selectAction);
-        _size = size;
-        AnchorPosition = anchorPosition;
-        Offset = offset;
+        OnSelect = new ButtonEvent(selectAction);
+        OnSubmit = new ButtonEvent(submitAction);
     }
     public Button() { }
 
     /// <inheritdoc />
     public override void Select()
     {
-        // TODO
+        OnSelect.Invoke();
     }
 
     public override NavigationData NavigationData { get; set; }
