@@ -44,3 +44,13 @@
 /processorParam:TextureFormat=Compressed
 /build:MonoCube.dae
 
+#begin Stray-Regular.otf
+/copy:Stray-Regular.otf
+
+#begin Stray.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Stray.spritefont
+

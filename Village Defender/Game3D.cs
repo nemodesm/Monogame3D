@@ -109,7 +109,7 @@ internal class Game3D : Engine
                      AnchorPosition.BottomLeft, AnchorPosition.BottomCenter, AnchorPosition.BottomRight
                  })
         {
-            Canvas.AddElement(new UIElement(new Rectangle(0, 0, -1, -1), anchorPosition, new Text(anchorPosition.ToString(), Color.Red)));
+            Canvas.AddElement(new UIElement(new Rectangle(0, 0, -1, -1), anchorPosition, new Text("Stray", anchorPosition.ToString(), Color.Red)));
         }
     }
 }
