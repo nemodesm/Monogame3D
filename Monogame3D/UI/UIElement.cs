@@ -34,7 +34,12 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
     public virtual AnchorPosition AnchorPosition
     {
         get => _anchorPosition;
-        set => _anchorPosition = value;
+        set
+        {
+            _anchorPosition = value;
+            
+            OnPositionChanged();
+        }
     }
 
     private Rectangle _position = new(0, 0, 100, 100);
@@ -45,7 +50,12 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
     public virtual Rectangle Position
     {
         get => _position;
-        set => _position = value;
+        set
+        {
+            _position = value;
+            
+            OnPositionChanged();
+        }
     }
 
     /// <summary>
@@ -53,65 +63,8 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
     /// </summary>
     public virtual Rectangle ScaledPosition
     {
-        get
-        {
-            if (AnchorPosition == AnchorPosition.Absolute)
-            {
-                return Position;
-            }
-            
-            var scaledParent = Parent!.ScaledPosition;
-            var screenScale = ScreenScale;
-            var (x, y) = ((int)(Position.X * screenScale.X), (int)(Position.Y * screenScale.Y));
-            var (width, height) = ((int)(Position.Width * screenScale.X), (int)(Position.Height * screenScale.Y));
-            
-            return AnchorPosition switch
-            {
-                AnchorPosition.TopLeft => new Rectangle(x + scaledParent.X, y + scaledParent.Y, width, height),
-                AnchorPosition.TopCenter => new Rectangle(
-                    scaledParent.Width / 2 - width / 2 + scaledParent.X,
-                    y + scaledParent.Y,
-                    width,
-                    height),
-                AnchorPosition.TopRight => new Rectangle(
-                    scaledParent.Width - width - x + scaledParent.X,
-                    y + scaledParent.Y,
-                    width,
-                    height),
-                AnchorPosition.CenterLeft => new Rectangle(
-                    x + scaledParent.X,
-                    scaledParent.Height / 2 - height / 2 + scaledParent.Y,
-                    width,
-                    height),
-                AnchorPosition.Center => new Rectangle(
-                    scaledParent.Width / 2 - width / 2 + scaledParent.X,
-                    scaledParent.Height / 2 - height / 2 + scaledParent.Y,
-                    width,
-                    height),
-                AnchorPosition.CenterRight => new Rectangle(
-                    scaledParent.Width - width - x + scaledParent.X,
-                    scaledParent.Height / 2 - height / 2 + scaledParent.Y,
-                    width,
-                    height),
-                AnchorPosition.BottomLeft => new Rectangle(
-                    x + scaledParent.X,
-                    scaledParent.Height - height - y + scaledParent.Y,
-                    width,
-                    height),
-                AnchorPosition.BottomCenter => new Rectangle(
-                    scaledParent.Width / 2 - width / 2 + scaledParent.X,
-                    scaledParent.Height - height - y + scaledParent.Y,
-                    width,
-                    height),
-                AnchorPosition.BottomRight => new Rectangle(
-                    scaledParent.Width - width - x + scaledParent.X,
-                    scaledParent.Height - height - y + scaledParent.Y,
-                    width,
-                    height),
-                AnchorPosition.Absolute => throw new ArgumentOutOfRangeException(),
-                _ => throw new ArgumentOutOfRangeException()
-            };
-        }
+        get;
+        private set;
     }
 
     public Vector2 ScreenScale => new(Engine.Graphics.PreferredBackBufferWidth / 1920f,
@@ -217,6 +170,8 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
     public T[] GetComponents<T>() where T : UIComponent => Components.OfType<T>().ToArray();
 
     #endregion
+
+    #region Core Methods
     
     public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch)
     {
@@ -250,6 +205,82 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
         {
             component.Initialise();
         }
+    }
+
+    #endregion
+    
+    #region Helper Functions
+
+    /// <summary>
+    /// Converts a point from the canvas to local position on this element
+    /// </summary>
+    /// <param name="point">The point to convert</param>
+    /// <returns>The converted point</returns>
+    protected internal Vector2 ConvertToScaledScreenSpace(Vector2 point)
+    {
+        return new Vector2(point.X * ScreenScale.X, point.Y * ScreenScale.Y);
+    }
+    
+    protected virtual void OnPositionChanged()
+    {
+        foreach (var child in Children)
+        {
+            child.OnPositionChanged();
+        }
+
+        if (AnchorPosition == AnchorPosition.Absolute)
+        {
+            ScaledPosition = Position;
+            return;
+        }
+        
+        ScaledPosition = Anchor(Scale(Position));
+    }
+
+    protected virtual Rectangle Scale(Rectangle position)
+    {
+        var scaledParent = Parent!.ScaledPosition;
+        var screenScale = ScreenScale;
+        var (x, y) = ((int)(position.X * screenScale.X), (int)(position.Y * screenScale.Y));
+        var (width, height) = ((int)(position.Width * screenScale.X), (int)(position.Height * screenScale.Y));
+
+        return new Rectangle(x + scaledParent.X, y + scaledParent.Y, width, height);
+    }
+
+    protected virtual Rectangle Anchor(Rectangle position)
+    {
+        var scaledParent = Parent!.ScaledPosition;
+        
+        Rectangle VTop(Rectangle inp) => inp;
+        Rectangle VCenter(Rectangle inp) => new Rectangle(inp.X, scaledParent.Height / 2 - inp.Height / 2 + inp.Y, inp.Width, inp.Height);
+        Rectangle VBottom(Rectangle inp) => new Rectangle(inp.X, scaledParent.Height - inp.Height - inp.Y, inp.Width, inp.Height);
+
+        Rectangle HLeft(Rectangle inp) => inp;
+        Rectangle HCenter(Rectangle inp) => new Rectangle(scaledParent.Width / 2 - inp.Width / 2 + inp.X, inp.Y, inp.Width, inp.Height);
+        Rectangle HRight(Rectangle inp) => new Rectangle(scaledParent.Width - inp.Width - inp.X, inp.Y, inp.Width, inp.Height);
+
+
+        return AnchorPosition switch
+        {
+            AnchorPosition.Absolute => position,
+            AnchorPosition.TopLeft => VTop(HLeft(position)),
+            AnchorPosition.TopCenter => VTop(HCenter(position)),
+            AnchorPosition.TopRight => VTop(HRight(position)),
+            AnchorPosition.CenterLeft => VCenter(HLeft(position)),
+            AnchorPosition.Center => VCenter(HCenter(position)),
+            AnchorPosition.CenterRight => VCenter(HRight(position)),
+            AnchorPosition.BottomLeft => VBottom(HLeft(position)),
+            AnchorPosition.BottomCenter => VBottom(HCenter(position)),
+            AnchorPosition.BottomRight => VBottom(HRight(position)),
+            _ => throw new ArgumentOutOfRangeException(nameof(AnchorPosition), AnchorPosition, null)
+        };
+    }
+
+    #endregion
+
+    public virtual bool Raycast(Vector2 point)
+    {
+        return ScaledPosition.Contains(point) || Children.Any(child => child.ScaledPosition.Contains(point));
     }
 
     #endregion
