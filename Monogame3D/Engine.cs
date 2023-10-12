@@ -58,17 +58,17 @@ public abstract class Engine : Game
     /// </summary>
     public static int ViewPadding
     {
-        get => viewPadding;
+        get => _viewPadding;
         set
         {
-            viewPadding = value;
+            _viewPadding = value;
             Instance.UpdateView();
         }
     }
     /// <summary>
     /// TODO: Document
     /// </summary>
-    private static int viewPadding;
+    private static int _viewPadding;
     
     /// <summary>
     /// TODO: Document

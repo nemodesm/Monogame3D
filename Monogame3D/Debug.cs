@@ -36,7 +36,7 @@ public static class Debug
             AutoFlush = true
         };
 
-        Log($"{ApplicationName}: Application opened at {DateTime.Now}", 0);
+        Log($"{ApplicationName}: Application opened at {GetTimeStamp()} on {GetDateFormat()}", 0);
     }
 
     private static void AttemptMovePreviousFile()
@@ -45,11 +45,22 @@ public static class Debug
             File.Move(_appDataPath + LogPath, _appDataPath + PreviousLogPath, true);
     }
 
-#nullable enable
+    private static string GetDateFormat()
+    {
+        var date = DateTime.Now;
+        return $"{date.Day}-{date.Month}-{date.Year}";
+    }
+
+    private static string GetTimeStamp()
+    {
+        var time = DateTime.Now;
+        return $"{time.Hour}:{time.Minute}:{time.Second}";
+    }
+
     private static string GetPrefix()
     {
         var stackTrace = new StackTrace(2);
-        return $"{DateTime.Now}:{stackTrace.GetFrame(0)?.GetMethod()?.DeclaringType}";
+        return $"{GetTimeStamp()}:{stackTrace.GetFrame(0)?.GetMethod()?.DeclaringType}";
     }
         
     public static void Log(object? message, LogLevel logLevel)
