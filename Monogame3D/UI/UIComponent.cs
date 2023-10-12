@@ -7,7 +7,7 @@ namespace MonoGame3D.UI;
 /// <summary>
 /// A component that can be attached to a UI Element and will receive calls to Draw and Update from the canvas
 /// </summary>
-public abstract class UIComponent : IUpdateable, ICanvasDrawable
+public abstract class UIComponent : Microsoft.Xna.Framework.IUpdateable, ICanvasDrawable
 {
     protected internal UIElement? Element { get; set; }
     protected Canvas Canvas => Element!.Canvas;

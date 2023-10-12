@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame3D._3DObjects;
 using MonoGame3D.InputSystem;
+using MonoGame3D.InputSystem.UI;
 using MonoGame3D.UI;
 
 namespace MonoGame3D;
@@ -74,8 +75,6 @@ public abstract class Engine : Game
     /// </summary>
     public static Viewport Viewport { get; private set; }
 
-    // time
-
     /// <summary>
     /// Initialises the Engine and sets all relevant properties.
     /// </summary>
@@ -106,6 +105,7 @@ public abstract class Engine : Game
         Components.Add(Camera);
         Components.Add(Canvas);
         MInput.Initialize();
+        Components.Add(UIEventManager.Init());
     }
 
     protected override void Initialize()
@@ -114,12 +114,15 @@ public abstract class Engine : Game
         Graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
         Graphics.IsFullScreen = true;
         Graphics.ApplyChanges();
+        UpdateView();
             
         base.Initialize();
     }
 
     protected override void Update(GameTime gameTime)
     {
+        MInput.Update();
+        
         DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
             
         base.Update(gameTime);

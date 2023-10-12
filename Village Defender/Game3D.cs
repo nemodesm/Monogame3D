@@ -15,7 +15,7 @@ internal class Game3D : Engine
 {
     protected override void Initialize()
     {
-        // TestUI();
+        TestUI();
         
         TestText();
         

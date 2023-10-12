@@ -145,9 +145,9 @@ public static partial class MInput
         /// </summary>
         public Vector2 Position
         {
-            get =>
-                Vector2.Transform(new Vector2(CurrentState.X, CurrentState.Y),
-                    Matrix.Invert(Engine.ScreenMatrix));
+            get => CurrentState.Position.ToVector2();
+                //Vector2.Transform(new Vector2(CurrentState.X, CurrentState.Y),
+                    //Matrix.Invert(Engine.ScreenMatrix));
 
             set
             {

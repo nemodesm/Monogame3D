@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame3D.InputSystem;
 
@@ -6,8 +7,9 @@ namespace MonoGame3D;
 
 public static class Input
 {
-    internal static bool UIInput = false;
-        
+    public static bool DisableUIInput { get; set; } = false;
+    public static Vector2 mousePosition => MInput.Mouse.Position;
+
     public static bool GetKeyDown(Keys key)
     {
         try

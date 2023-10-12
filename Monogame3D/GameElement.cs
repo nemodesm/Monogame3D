@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 
 namespace MonoGame3D;
 
-public abstract class GameElement : IUpdateable
+public abstract class GameElement : Microsoft.Xna.Framework.IUpdateable
 {
     /// <summary>
     /// The name of this element

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame3D.UI.Components;
 
 namespace MonoGame3D.UI;
 
@@ -168,6 +170,12 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
     /// <typeparam name="T">The type of the component to get - must be of type <see cref="UIComponent"/></typeparam>
     /// <returns>The components of type <typeparamref name="T"/> attached to this element</returns>
     public T[] GetComponents<T>() where T : UIComponent => Components.OfType<T>().ToArray();
+    
+    public bool TryGetComponent<T>([NotNullWhen(true)] out T? component) where T : UIComponent
+    {
+        component = GetComponent<T>();
+        return component is not null;
+    }
 
     #endregion
 
@@ -196,6 +204,8 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
 
     public void Initialize()
     {
+        OnPositionChanged();
+        
         foreach (var element in Children)
         {
             element.Initialize();
@@ -278,9 +288,38 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
 
     #endregion
 
-    public virtual bool Raycast(Vector2 point)
+    /// <summary>
+    /// TODO: Document
+    /// </summary>
+    /// <param name="point"></param>
+    /// <param name="hit"></param>
+    /// <returns></returns>
+    public virtual bool Raycast(Vector2 point, out UIElement? hit)
     {
-        return ScaledPosition.Contains(point) || Children.Any(child => child.ScaledPosition.Contains(point));
+        foreach (var child in Children)
+        {
+            if (child.Raycast(point, out hit))
+            {
+                return true;
+            }
+        }
+
+        if (ScaledPosition.Contains(point))
+        {
+            hit = this;
+            return true;
+        }
+
+#if AGGRESSIVE_DEBUG
+        if (contains && !children)
+        {
+            Debug.Log($"Hit {this}");
+        }
+#endif
+
+        hit = null;
+        
+        return false;
     }
 
     #endregion

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -73,4 +74,18 @@ public sealed class Canvas : UIElement, IGameComponent, IDrawable
 
     // [Obsolete("Cannot add components to the root canvas object", true)]
     public override void AddComponent(UIComponent component) => Debug.LogError("Cannot add components to the root canvas object");
+
+    public override bool Raycast(Vector2 point, out UIElement? hit)
+    {
+        foreach (var child in Children)
+        {
+            if (child.Raycast(point, out hit))
+            {
+                return true;
+            }
+        }
+
+        hit = null;
+        return false;
+    }
 }
