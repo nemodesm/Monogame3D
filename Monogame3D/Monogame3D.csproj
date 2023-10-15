@@ -17,8 +17,10 @@
   </ItemGroup>
   
   <ItemGroup>
+    <PackageReference Include="Facepunch.Steamworks" Version="2.3.3" />
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
   </ItemGroup>
 </Project>

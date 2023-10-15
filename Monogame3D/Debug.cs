@@ -54,7 +54,7 @@ public static class Debug
     private static string GetTimeStamp()
     {
         var time = DateTime.Now;
-        return $"{time.Hour}:{time.Minute}:{time.Second}";
+        return $"{time.Hour:00}:{time.Minute:00}:{time.Second:00}";
     }
 
     private static string GetPrefix()

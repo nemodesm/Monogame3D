@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Xna.Framework;
-using MonoGame3D.InputSystem;
 
 // TODO: button is not selectable
 // TODO: button is not clickable

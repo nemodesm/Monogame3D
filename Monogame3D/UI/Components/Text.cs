@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace MonoGame3D.UI.Components;
@@ -69,11 +68,11 @@ public class Text : UIComponent
     {
 // Finds the center of the string in coordinates inside the text rectangle
         Vector2 textSize = _font.MeasureString(text);
-// Places text in center of the screen
         
         var pos = ScaledPosition;
 
-        var scale = enableSizeControls ? Element.ScreenScale : new Vector2(pos.Width / textSize.X, pos.Height / textSize.Y);
+// Places text in center of the screen
+        var scale = enableSizeControls ? UIElement.ScreenScale : new Vector2(pos.Width / textSize.X, pos.Height / textSize.Y);
         
         spriteBatch.DrawString(_font, text, new Vector2(pos.X, pos.Y), ColorTint, 0, new Vector2(0),
             scale, SpriteEffects.None, 0.5f);

@@ -23,7 +23,7 @@ public abstract class BaseInputSystem : IUpdateable
 
     public virtual void Move(MoveDirection direction)
     {
-        EventManager.MoveSelection(direction);
+        EventManager?.MoveSelection(direction);
     }
 
     public abstract void Update(GameTime gameTime);

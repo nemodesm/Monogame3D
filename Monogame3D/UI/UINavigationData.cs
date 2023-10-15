@@ -1,6 +1,4 @@
-﻿using MonoGame3D.UI.Components;
-
-namespace MonoGame3D.UI;
+﻿namespace MonoGame3D.UI;
 
 
 public struct NavigationData

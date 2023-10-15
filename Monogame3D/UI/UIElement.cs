@@ -4,7 +4,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame3D.UI.Components;
 
 namespace MonoGame3D.UI;
 
@@ -69,7 +68,7 @@ public class UIElement : HierarchyElement<UIElement>, ICanvasDrawable
         private set;
     }
 
-    public Vector2 ScreenScale => new(Engine.Graphics.PreferredBackBufferWidth / 1920f,
+    protected internal static Vector2 ScreenScale => new(Engine.Graphics.PreferredBackBufferWidth / 1920f,
         Engine.Graphics.PreferredBackBufferHeight / 1080f);
 
     #endregion
