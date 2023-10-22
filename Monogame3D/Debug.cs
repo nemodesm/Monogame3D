@@ -62,10 +62,14 @@ public static class Debug
         var stackTrace = new StackTrace(2);
         return $"{GetTimeStamp()}:{stackTrace.GetFrame(0)?.GetMethod()?.DeclaringType}";
     }
-        
+    
     public static void Log(object? message, LogLevel logLevel)
     {
-        var toLog = logLevel == 0 ? $"{message}\n" : $"[{GetPrefix()}/{logLevel}]: {message}\n";
+        var toLog = logLevel == 0
+            ? $"{message}\n"
+            : $"[{GetPrefix()}/{logLevel}]: {message}\n{(logLevel == LogLevel.Error ?
+                new StackTrace(1) : "")}";
+        
 #if DEBUG
         Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.WriteLine(toLog);
@@ -73,7 +77,7 @@ public static class Debug
 
         Writer.WriteLine(toLog);
     }
-
+    
     public static void Log(object? message)
     {
         var toLog = $"[{GetPrefix()}/INFO]: {message}\n";
