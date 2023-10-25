@@ -23,7 +23,7 @@ public static class Debug
 
     static Debug()
     {
-        _appDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/{ApplicationName}/";
+        _appDataPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)}/{ApplicationName}/";
 
         if (!Directory.Exists(_appDataPath)) Directory.CreateDirectory(_appDataPath);
             
