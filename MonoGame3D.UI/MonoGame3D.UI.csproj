@@ -3,8 +3,24 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Engine\defaultFont.xnb" />
+    <None Remove="Content\Engine\defaultUIImage.xnb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Engine\defaultFont.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Engine\defaultUIImage.xnb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="MonoGame.Framework.DesktopGL" Version="3.8.1.303">
       <PrivateAssets>All</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Monogame3D.Input\MonoGame3D.Input.csproj" />
+    <ProjectReference Include="..\Monogame3D\MonoGame3D.csproj" />
   </ItemGroup>
 </Project>

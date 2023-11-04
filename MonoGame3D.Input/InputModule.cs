@@ -5,7 +5,7 @@ using MonoGame3D;
 
 namespace Monogame3D.Input;
 
-public class Game1 : EngineModule
+public class InputModule : EngineModule
 {
     public override void Initialize()
     {

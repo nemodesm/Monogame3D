@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DEBUG": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "VISUAL_STUDIO": "true"
+      }
+    }
+  }
+}

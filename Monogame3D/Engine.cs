@@ -1,9 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame3D._3DObjects;
-using MonoGame3D.InputSystem;
-using MonoGame3D.InputSystem.UI;
-using MonoGame3D.UI;
 
 namespace MonoGame3D;
 
@@ -23,11 +21,6 @@ public abstract class Engine : Game
     /// The rendering camera for the game
     /// </summary>
     public static Camera Camera { get; private set; } = null!;
-
-    /// <summary>
-    /// The main UI Canvas for the game
-    /// </summary>
-    public static Canvas Canvas { get; private set; } = null!;
 
     /// <summary>
     /// TODO: Document
@@ -69,7 +62,9 @@ public abstract class Engine : Game
     /// TODO: Document
     /// </summary>
     private static int _viewPadding;
-    
+
+    private readonly EngineModule[] _modules;
+
     /// <summary>
     /// TODO: Document
     /// </summary>
@@ -78,13 +73,17 @@ public abstract class Engine : Game
     /// <summary>
     /// Initialises the Engine and sets all relevant properties.
     /// </summary>
-    protected Engine()
+    protected Engine(params EngineModule[] modules) : base()
     {
         Instance = this;
+
+        this._modules = modules;
 
         SetupGraphics();
 
         InitializeRootComponents();
+
+        InitialiseModules();
     }
 
     private void SetupGraphics()
@@ -97,20 +96,11 @@ public abstract class Engine : Game
         Content.RootDirectory = "Content";
     }
 
-    private void InitialiseModules()
-    {
-        
-    }
-
     private void InitializeRootComponents()
     {
         Camera = new Camera();
-        Canvas = new Canvas();
-            
+        
         Components.Add(Camera);
-        Components.Add(Canvas);
-        MInput.Initialize();
-        Components.Add(UIEventManager.Init());
     }
 
     protected override void Initialize()
@@ -126,10 +116,8 @@ public abstract class Engine : Game
 
     protected override void Update(GameTime gameTime)
     {
-        MInput.Update();
-        
         DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
-            
+
         base.Update(gameTime);
     }
 
@@ -139,8 +127,11 @@ public abstract class Engine : Game
         base.UnloadContent();
     }
 
-    protected sealed override void Draw(GameTime gameTime) => base.Draw(gameTime);
-    
+    protected sealed override void Draw(GameTime gameTime)
+    {
+        base.Draw(gameTime);
+    }
+
     private void UpdateView()
     {
         float screenWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
@@ -180,4 +171,42 @@ public abstract class Engine : Game
         //Debug Log
         //Calc.Log("Update View - " + screenWidth + "x" + screenHeight + " - " + viewport.Width + "x" + viewport.GuiHeight + " - " + viewport.X + "," + viewport.Y);
     }
+
+    #region Modules
+
+    private void InitialiseModules()
+    {
+        foreach (var engineModule in _modules)
+        {
+            this.Components.Add(engineModule);
+        }
+    }
+
+    public T GetModule<T>() where T : EngineModule
+    {
+        foreach (var module in _modules)
+        {
+            if (module is T tModule)
+            {
+                return tModule;
+            }
+        }
+
+        throw new Exception("Module not found");
+    }
+
+    public EngineModule GetModule(Type type)
+    {
+        foreach (var module in _modules)
+        {
+            if (module.GetType() == type)
+            {
+                return module;
+            }
+        }
+
+        throw new Exception("Module not found");
+    }
+
+    #endregion
 }

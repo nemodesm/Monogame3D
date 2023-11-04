@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VillageDefender", "Village 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame3D", "Monogame3D\MonoGame3D.csproj", "{6F4186CB-040C-4CFC-9685-D03E6EE2A615}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame3D.Input", "Monogame3D.Input\Monogame3D.Input.csproj", "{8DEE891C-944A-44B8-BF83-EA54BE8EAD71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame3D.Input", "Monogame3D.Input\MonoGame3D.Input.csproj", "{8DEE891C-944A-44B8-BF83-EA54BE8EAD71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoGame3D.UI", "Monogame3D.UI\Monogame3D.UI.csproj", "{8D010C19-184D-4F15-B136-64546A719519}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonoGame3D.UI", "Monogame3D.UI\MonoGame3D.UI.csproj", "{8D010C19-184D-4F15-B136-64546A719519}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -67,12 +67,15 @@ public static class Debug
     {
         var toLog = logLevel == 0
             ? $"{message}\n"
-            : $"[{GetPrefix()}/{logLevel}]: {message}\n{(logLevel == LogLevel.Error ?
-                new StackTrace(1) : "")}";
-        
+            : $"[{GetPrefix()}/{logLevel}]: {message}\n{(logLevel == LogLevel.Error ? new StackTrace(1) : "")}";
+
 #if DEBUG
+#if TRACE
+        System.Diagnostics.Debug.WriteLine(toLog);
+#else
         Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.WriteLine(toLog);
+#endif
 #endif
 
         Writer.WriteLine(toLog);
@@ -82,8 +85,12 @@ public static class Debug
     {
         var toLog = $"[{GetPrefix()}/INFO]: {message}\n";
 #if DEBUG
+#if TRACE
+        System.Diagnostics.Debug.WriteLine(toLog);
+#else
         Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine(toLog);
+#endif
 #endif
 
         Writer.WriteLine(toLog);
@@ -93,8 +100,12 @@ public static class Debug
     {
         var toLog = $"[{GetPrefix()}/WARN]: {message}\n";
 #if DEBUG
+#if TRACE
+        System.Diagnostics.Debug.WriteLine(toLog);
+#else
         Console.ForegroundColor = ConsoleColor.DarkYellow;
         Console.WriteLine(toLog);
+#endif
 #endif
 
         Writer.WriteLine(toLog);
@@ -106,8 +117,12 @@ public static class Debug
 
         var toLog = $"[{GetPrefix()}/ERROR]: {message}\n{stackTrace}";
 #if DEBUG
+#if TRACE
+        System.Diagnostics.Debug.WriteLine(toLog);
+#else
         Console.ForegroundColor = ConsoleColor.DarkRed;
         Console.Error.WriteLine(toLog);
+#endif
 #endif
 
         Writer.WriteLine(toLog);

@@ -49,6 +49,8 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Monogame3D.Input\MonoGame3D.Input.csproj" />
+    <ProjectReference Include="..\Monogame3D.UI\MonoGame3D.UI.csproj" />
     <ProjectReference Include="..\Monogame3D\MonoGame3D.csproj" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">

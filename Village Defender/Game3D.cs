@@ -13,6 +13,11 @@ namespace VillageDefender;
 /// </summary>
 internal class Game3D : Engine
 {
+    public Game3D() : base(new UIModule())
+    { }
+
+    protected Canvas Canvas => GetModule<UIModule>().Canvas;
+
     protected override void Initialize()
     {
         TestUI();

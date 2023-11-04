@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Diagnostics;
 using VillageDefender;
 
@@ -17,5 +16,9 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine(ex);
+#if VISUAL_STUDIO
+    Debug.WriteLine(ex);
+#else
+    Console.Error.WriteLine(ex);
+#endif
 }
