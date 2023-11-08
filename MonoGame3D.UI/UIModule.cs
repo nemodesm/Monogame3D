@@ -1,20 +1,26 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using MonoGame3D;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Monogame3D.Input;
-using MonoGame3D.UI;
 
 namespace MonoGame3D.UI;
 
-public class UIModule : InputModule
+public class UIModule : InputModule, IDrawable
 {
+    #region IDrawable
+
+    public int DrawOrder => 1000;
+    public bool Visible => true;
+    public event EventHandler<EventArgs>? DrawOrderChanged;
+    public event EventHandler<EventArgs>? VisibleChanged;
+
+    #endregion
+    
     /// <summary>
     /// The main UI Canvas for the game
     /// </summary>
-    public Canvas Canvas { get; private set; } = null!;
+    public Canvas Canvas { get; private set; }
 
-    public UIModule()
+    public UIModule() : base()
     {
         Canvas = new Canvas();
     }
@@ -31,11 +37,9 @@ public class UIModule : InputModule
         base.Update(gameTime);
     }
 
-    public override void Draw(GameTime gameTime)
+    public void Draw(GameTime gameTime)
     {
         Canvas.Draw(gameTime);
-
-        base.Draw(gameTime);
     }
 }
 

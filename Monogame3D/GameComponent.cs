@@ -1,9 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using System;
+using MonoGame3D;
+using IUpdateable = Microsoft.Xna.Framework.IUpdateable;
 
-namespace MonoGame3D;
-
-public class GameComponent : IGameComponent, IUpdateable, IDisposable
+public class GameComponent : IGameComponent, IUpdateable
 {
     public GameComponent() : this(Engine.Instance) {}
 
@@ -67,11 +67,5 @@ public class GameComponent : IGameComponent, IUpdateable, IDisposable
 
     protected virtual void Dispose(bool disposing)
     {
-    }
-
-    public void Dispose()
-    {
-        this.Dispose(true);
-        GC.SuppressFinalize((object)this);
     }
 }
