@@ -70,7 +70,7 @@ public static class Debug
             : $"[{GetPrefix()}/{logLevel}]: {message}\n{(logLevel == LogLevel.Error ? new StackTrace(1) : "")}";
 
 #if DEBUG
-#if TRACE
+#if VISUAL_STUDIO
         System.Diagnostics.Debug.WriteLine(toLog);
 #else
         Console.ForegroundColor = ConsoleColor.DarkCyan;
@@ -85,7 +85,7 @@ public static class Debug
     {
         var toLog = $"[{GetPrefix()}/INFO]: {message}\n";
 #if DEBUG
-#if TRACE
+#if VISUAL_STUDIO
         System.Diagnostics.Debug.WriteLine(toLog);
 #else
         Console.ForegroundColor = ConsoleColor.White;
@@ -100,7 +100,7 @@ public static class Debug
     {
         var toLog = $"[{GetPrefix()}/WARN]: {message}\n";
 #if DEBUG
-#if TRACE
+#if VISUAL_STUDIO
         System.Diagnostics.Debug.WriteLine(toLog);
 #else
         Console.ForegroundColor = ConsoleColor.DarkYellow;
@@ -117,7 +117,7 @@ public static class Debug
 
         var toLog = $"[{GetPrefix()}/ERROR]: {message}\n{stackTrace}";
 #if DEBUG
-#if TRACE
+#if VISUAL_STUDIO
         System.Diagnostics.Debug.WriteLine(toLog);
 #else
         Console.ForegroundColor = ConsoleColor.DarkRed;
