@@ -1,9 +1,7 @@
-﻿using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using MonoGame3D;
+﻿using MonoGame3D;
 
-namespace Monogame3D.Input;
+// ReSharper disable once CheckNamespace
+namespace Monogame3D.Modules;
 
 public class InputModule : EngineModule
 {

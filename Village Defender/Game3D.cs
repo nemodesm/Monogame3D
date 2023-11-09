@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame3D;
 using MonoGame3D._3DObjects;
+using Monogame3D.Modules;
 using MonoGame3D.UI;
 using MonoGame3D.UI.Components;
 
@@ -99,7 +100,7 @@ internal class Game3D : Engine
         {
             removed = true;
             // Remove second child to test removing element with children
-            Canvas.RemoveElement(Canvas.GetChild(1));
+            Canvas.RemoveElement(Canvas.GetChild(1)!);
             Debug.Log("Removed UI Element");
         }
     }

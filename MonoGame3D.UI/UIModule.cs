@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
-using Monogame3D.Input;
+using MonoGame3D.UI;
 
-namespace MonoGame3D.UI;
+// ReSharper disable once CheckNamespace
+namespace Monogame3D.Modules;
 
 public class UIModule : InputModule, IDrawable
 {
