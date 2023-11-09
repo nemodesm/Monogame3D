@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace MonoGame3D.InputSystem;
+namespace MonoGame3D.InputSystem.Legacy;
 
 public static partial class MInput
 {
@@ -12,8 +12,8 @@ public static partial class MInput
     public class GamePadData
     {
         public PlayerIndex PlayerIndex { get; private set; }
-        public GamePadState PreviousState;
-        public GamePadState CurrentState;
+        public Microsoft.Xna.Framework.Input.GamePadState PreviousState;
+        public Microsoft.Xna.Framework.Input.GamePadState CurrentState;
         public bool Attached;
 
         private float _rumbleStrength;
@@ -50,7 +50,7 @@ public static partial class MInput
         public void UpdateNull()
         {
             PreviousState = CurrentState;
-            CurrentState = new GamePadState();
+            CurrentState = new Microsoft.Xna.Framework.Input.GamePadState();
             Attached = GamePad.GetState(PlayerIndex).IsConnected;
 
             if (_rumbleTime > 0)

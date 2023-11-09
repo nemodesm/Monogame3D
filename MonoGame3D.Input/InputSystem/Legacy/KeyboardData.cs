@@ -1,6 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 
-namespace MonoGame3D.InputSystem;
+namespace MonoGame3D.InputSystem.Legacy;
 
 public static partial class MInput
 {

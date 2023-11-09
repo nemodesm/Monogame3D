@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MonoGame3D.InputSystem;
+namespace MonoGame3D.InputSystem.Legacy;
 
 /// <summary>
 /// Represents a virtual button, axis or joystick whose state is determined by the state of its VirtualInputNodes

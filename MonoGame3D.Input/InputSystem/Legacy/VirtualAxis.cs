@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.Xna.Framework.Input;
 using MonoGame3D.MathUtils;
 
-namespace MonoGame3D.InputSystem;
+namespace MonoGame3D.InputSystem.Legacy;
 
 /// <summary>
 /// A virtual input represented as a float between -1 and 1

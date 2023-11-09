@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame3D.InputSystem;
+using MonoGame3D.InputSystem.Legacy;
 
 namespace MonoGame3D.UI;
 

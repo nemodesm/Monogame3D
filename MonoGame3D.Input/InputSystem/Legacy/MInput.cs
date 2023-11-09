@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
-namespace MonoGame3D.InputSystem;
+namespace MonoGame3D.InputSystem.Legacy;
 
 // TODO: Add support for getting what gamepad is being used and get what prompt to show
 

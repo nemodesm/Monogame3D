@@ -1,4 +1,4 @@
-﻿namespace MonoGame3D.InputSystem;
+﻿namespace MonoGame3D.InputSystem.Legacy;
 
 public interface ISubmitHandler
 {

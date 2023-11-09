@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
 using MonoGame3D.Exceptions;
+using MonoGame3D.InputSystem.Legacy;
 using MonoGame3D.UI;
 
 namespace MonoGame3D.InputSystem.UI;

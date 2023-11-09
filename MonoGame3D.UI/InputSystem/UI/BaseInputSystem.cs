@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using MonoGame3D.InputSystem.Legacy;
 
 namespace MonoGame3D.InputSystem.UI;
 

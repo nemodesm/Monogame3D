@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame3D.MathUtils;
 
-namespace MonoGame3D.InputSystem;
+namespace MonoGame3D.InputSystem.Legacy;
 
 /// <summary>
 /// A virtual input that is represented as a Vector2, with both X and Y as values between -1 and 1
