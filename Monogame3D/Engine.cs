@@ -105,12 +105,6 @@ public abstract class Engine : Game
 
     protected override void Initialize()
     {
-        Graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
-        Graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-        Graphics.IsFullScreen = true;
-        Graphics.ApplyChanges();
-        UpdateView();
-            
         base.Initialize();
     }
 
