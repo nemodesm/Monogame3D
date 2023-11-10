@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using MonoGame3D.UI;
 
 // ReSharper disable once CheckNamespace
-namespace Monogame3D.Modules;
+namespace MonoGame3D.Modules;
 
 public class UIModule : InputModule, IDrawable
 {
@@ -29,6 +29,8 @@ public class UIModule : InputModule, IDrawable
     public override void Initialize()
     {
         Canvas.Initialize();
+        
+        base.Initialize();
     }
 
     public override void Update(GameTime gameTime)

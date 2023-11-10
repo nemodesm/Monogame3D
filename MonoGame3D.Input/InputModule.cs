@@ -1,15 +1,24 @@
-﻿using MonoGame3D;
+﻿using Microsoft.Xna.Framework;
+using MonoGame3D;
+using MonoGame3D.InputSystem.Legacy;
 
 // ReSharper disable once CheckNamespace
-namespace Monogame3D.Modules;
+namespace MonoGame3D.Modules;
 
 public class InputModule : EngineModule
 {
     public override void Initialize()
     {
-        // TODO: Add your initialization logic here
+        MInput.Initialize();
 
         base.Initialize();
+    }
+
+    public override void Update(GameTime gameTime)
+    {
+        MInput.Update();
+        
+        base.Update(gameTime);
     }
 }
 

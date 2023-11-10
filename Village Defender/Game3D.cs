@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using MonoGame3D;
 using MonoGame3D._3DObjects;
-using Monogame3D.Modules;
+using MonoGame3D.Modules;
 using MonoGame3D.UI;
 using MonoGame3D.UI.Components;
 
@@ -21,6 +21,8 @@ internal class Game3D : Engine
 
     protected override void Initialize()
     {
+        MonoGame3D.Window.EnterFullscreen();
+        
         TestUI();
         
         TestText();
@@ -43,12 +45,32 @@ internal class Game3D : Engine
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
         
+        if (Input.GetKeyDown(Keys.A))
+        {
+            MonoGame3D.Window.ToggleFullscreen();
+        }
+        
         Camera.Position.X += 0.01f;
             
         // Really aggressive garbage collection to make sure no assets are unintentionally unloaded in destructors
         GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive, true, true);
+
+        UpdateCamera(gameTime);
             
         base.Update(gameTime);
+    }
+
+    private void UpdateCamera(GameTime gameTime)
+    {
+        Window.Position = GetWindowPos(gameTime.TotalGameTime.TotalSeconds);
+
+        Point GetWindowPos(double totalSeconds)
+        {
+            var sin = (Math.Sin(totalSeconds * 1) + 1) / 2;
+            var cos = (Math.Cos(totalSeconds * 5) + 1) / 2;
+            return new Point((int)(sin * GraphicsDevice.Adapter.CurrentDisplayMode.Width -  sin *Graphics.PreferredBackBufferWidth),
+                (int)(cos * GraphicsDevice.Adapter.CurrentDisplayMode.Height - cos * Graphics.PreferredBackBufferHeight));
+        }
     }
 
     private void TestXmlUI()

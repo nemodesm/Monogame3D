@@ -8,6 +8,7 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <Nullable>enable</Nullable>
     <ImplicitUsings>disable</ImplicitUsings>
+    <RootNamespace>MonoGame3D</RootNamespace>
   </PropertyGroup>
   
   <ItemGroup>
