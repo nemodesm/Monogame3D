@@ -41,3 +41,12 @@ There is something to be aware of, when trying to load 3D models, you might rece
 change the import properties in MCGB Editor to use Importer: ``FBX Importer`` rather than the default ``Open Asset
 Import Library``. This is explained in [issue #6179](https://github.com/MonoGame/MonoGame/issues/6179) on the Monogame
 repository.
+
+## Final notes
+
+If you have any questions, especially while the wiki if non existent, do not hesitate to contact me on Discord:
+
+[![Discord][3]][0]
+
+[0]: https://discord.gg/GJsQadv9Mc
+[3]: https://discordapp.com/api/guilds/1172944878582370417/widget.png?style=banner3
