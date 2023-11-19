@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame3D._3DObjects;
@@ -107,12 +108,23 @@ public abstract class Engine : Game
     {
         base.Initialize();
     }
-
+    
     protected override void Update(GameTime gameTime)
     {
         DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
 
-        base.Update(gameTime);
+        // this._updateables.ForEachFilteredItem<GameTime>(UpdateAction, gameTime);
+        foreach (var updateable in Components.Where(component => component is Microsoft.Xna.Framework.IUpdateable))
+        {
+            try
+            {
+                ((Microsoft.Xna.Framework.IUpdateable)updateable!).Update(gameTime);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
     }
 
     protected override void UnloadContent()
@@ -123,7 +135,18 @@ public abstract class Engine : Game
 
     protected sealed override void Draw(GameTime gameTime)
     {
-        base.Draw(gameTime);
+        // this._drawables.ForEachFilteredItem<GameTime>(Game.DrawAction, gameTime);
+        foreach (var updateable in Components.Where(component => component is IDrawable))
+        {
+            try
+            {
+                ((IDrawable)updateable!).Draw(gameTime);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
+        }
     }
 
     private void UpdateView()
