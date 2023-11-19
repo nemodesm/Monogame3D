@@ -1,9 +1,9 @@
-﻿using Microsoft.Xna.Framework;
-using System;
-using MonoGame3D;
-using IUpdateable = Microsoft.Xna.Framework.IUpdateable;
+﻿using System;
+using Microsoft.Xna.Framework;
 
-public class GameComponent : IGameComponent, IUpdateable
+namespace MonoGame3D;
+
+public class GameComponent : IGameComponent, Microsoft.Xna.Framework.IUpdateable
 {
     public GameComponent() : this(Engine.Instance) {}
 
@@ -47,9 +47,9 @@ public class GameComponent : IGameComponent, IUpdateable
         }
     }
 
-    public event EventHandler<EventArgs> EnabledChanged;
+    public event EventHandler<EventArgs>? EnabledChanged;
 
-    public event EventHandler<EventArgs> UpdateOrderChanged;
+    public event EventHandler<EventArgs>? UpdateOrderChanged;
 
     ~GameComponent() => this.Dispose(false);
 
@@ -61,9 +61,9 @@ public class GameComponent : IGameComponent, IUpdateable
     {
     }
 
-    protected virtual void OnUpdateOrderChanged(object sender, EventArgs args) => this.UpdateOrderChanged(sender, args);
+    protected virtual void OnUpdateOrderChanged(object? sender, EventArgs args) => this.UpdateOrderChanged(sender, args);
 
-    protected virtual void OnEnabledChanged(object sender, EventArgs args) => this.EnabledChanged(sender, args);
+    protected virtual void OnEnabledChanged(object? sender, EventArgs args) => this.EnabledChanged(sender, args);
 
     protected virtual void Dispose(bool disposing)
     {
