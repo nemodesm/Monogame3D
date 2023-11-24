@@ -51,7 +51,14 @@ public struct InputState : IUpdateable
         public MouseButton[] PressedButtons = Array.Empty<MouseButton>();
         public MouseButton[] PressedButtonsLastFrame = Array.Empty<MouseButton>();
 
-        public MouseState() { }
+        public Vector2 Position;
+        public Vector2 PositionLastFrame;
+        public Vector2 Delta;
+
+        public MouseState()
+        {
+            Position = PositionLastFrame = Delta = default;
+        }
 
         public static MouseState GetState(InputState inputState)
         {
@@ -69,6 +76,10 @@ public struct InputState : IUpdateable
             mouseState.PressedButtons = pressedButtons.ToArray();
             
             mouseState.PressedButtonsLastFrame = inputState.Mouse.PressedButtons;
+            
+            mouseState.Position = new Vector2(st.Position.X, st.Position.Y);
+            mouseState.PositionLastFrame = inputState.Mouse.Position;
+            mouseState.Delta = mouseState.Position - inputState.Mouse.PositionLastFrame;
             
             return mouseState;
         }

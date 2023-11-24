@@ -9,13 +9,17 @@ namespace MonoGame3D;
 public static class Input
 {
     public static bool DisableUIInput { get; set; } = false;
-    public static Vector2 mousePosition => MInput.Mouse.Position;
+    
+    /// <inheritdoc cref="InputState.MouseState.Position"/>
+    public static Vector2 mousePosition => InputState.Mouse.Position;
+    
+    internal static InputState InputState;
 
     public static bool GetKeyDown(Keys key)
     {
         try
         {
-            return MInput.Keyboard.Pressed(key);
+            return InputState.Keyboard.GetKeyDown(key);
         }
         catch (NullReferenceException e)
         {
@@ -28,7 +32,7 @@ public static class Input
     {
         try
         {
-            return MInput.Keyboard.Check(key);
+            return InputState.Keyboard.GetKey(key);
         }
         catch (NullReferenceException e)
         {
@@ -41,7 +45,7 @@ public static class Input
     {
         try
         {
-            return MInput.Keyboard.Released(key);
+            return InputState.Keyboard.GetKeyUp(key);
         }
         catch (NullReferenceException e)
         {
@@ -50,11 +54,18 @@ public static class Input
         }
     }
 
-    public static float GetAxis(AxisDefinition axis)
+    public static float GetAxis(Axis axis)
     {
-        var @out = 0f;
-        if (GetKey(axis.negative)) @out--;
-        if (GetKey(axis.positive)) @out++;
-        return @out;
+        return axis.Value;
+    }
+    
+    internal static void Update()
+    {
+        MInput.Update();
+    }
+
+    public static void Initialize()
+    {
+        InputState = new InputState();
     }
 }
