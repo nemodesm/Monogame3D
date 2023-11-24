@@ -11,8 +11,11 @@ public class UIModule : InputModule, IDrawable
 
     public int DrawOrder => 1000;
     public bool Visible => true;
+    
+#pragma warning disable 0067
     public event EventHandler<EventArgs>? DrawOrderChanged;
     public event EventHandler<EventArgs>? VisibleChanged;
+#pragma warning restore 0067
 
     #endregion
     

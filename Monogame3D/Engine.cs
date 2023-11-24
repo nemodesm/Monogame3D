@@ -109,6 +109,7 @@ public abstract class Engine : Game
         base.Initialize();
     }
     
+    // TODO: Cache which components are IUpdateable
     protected override void Update(GameTime gameTime)
     {
         DeltaTime = (float) gameTime.ElapsedGameTime.TotalSeconds;
@@ -132,7 +133,8 @@ public abstract class Engine : Game
         ContentManager.Unload();
         base.UnloadContent();
     }
-
+    
+    // TODO: Cache which components are IDrawable
     protected sealed override void Draw(GameTime gameTime)
     {
         // this._drawables.ForEachFilteredItem<GameTime>(Game.DrawAction, gameTime);

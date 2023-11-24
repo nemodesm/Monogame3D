@@ -22,7 +22,7 @@ public abstract class BaseInputSystem : IUpdateable
         IsActiveInputSystem = false;
     }
 
-    public virtual void Move(MoveDirection direction)
+    public virtual void MoveSelection(MoveDirection direction)
     {
         EventManager?.MoveSelection(direction);
     }
