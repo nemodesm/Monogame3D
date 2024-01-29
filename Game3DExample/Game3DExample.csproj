@@ -8,6 +8,7 @@
     <Platforms>AnyCPU;x86;ARM32;x64</Platforms>
     <LangVersion>12</LangVersion>
     <Nullable>enable</Nullable>
+    <RootNamespace>VillageDefender</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -52,9 +53,9 @@
     <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.1.303" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Monogame3D.Input\MonoGame3D.Input.csproj" />
-    <ProjectReference Include="..\Monogame3D.UI\MonoGame3D.UI.csproj" />
-    <ProjectReference Include="..\Monogame3D\MonoGame3D.csproj" />
+    <ProjectReference Include="..\Monogame3D.Input\Monogame3D.Input.csproj" />
+    <ProjectReference Include="..\Monogame3D.UI\Monogame3D.UI.csproj" />
+    <ProjectReference Include="..\Monogame3D\Monogame3D.csproj" />
   </ItemGroup>
   <Target Name="RestoreDotnetTools" BeforeTargets="Restore">
     <Message Text="Restoring dotnet tools" Importance="High" />

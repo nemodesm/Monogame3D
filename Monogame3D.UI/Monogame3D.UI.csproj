@@ -23,7 +23,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Monogame3D.Input\MonoGame3D.Input.csproj" />
-    <ProjectReference Include="..\Monogame3D\MonoGame3D.csproj" />
+    <ProjectReference Include="..\Monogame3D.Input\Monogame3D.Input.csproj" />
+    <ProjectReference Include="..\Monogame3D\Monogame3D.csproj" />
   </ItemGroup>
 </Project>
