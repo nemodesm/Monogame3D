@@ -1,3 +1,8 @@
+# A word about the lack of updates
+
+Hey there, as you may have noticed, this project has suddenly stopped receiving updates. It is not abandoned, and I definitely mant to come back to this, I just have another (unannounced) project, which I have to work on
+
+
 # Monogame 3D
 
 Monogame 3D is a lightweight 3D extension to [Monogame](https://www.monogame.net/). It does not require any third party libraries and is entirely
